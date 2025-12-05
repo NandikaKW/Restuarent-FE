@@ -49,3 +49,44 @@ export interface UpdateOrderResponse {
   message: string;
   order: Order; // This should contain the updated order object
 }
+export interface AdminUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'user' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserStats {
+  totalUsers: number;
+  adminUsers: number;
+  regularUsers: number;
+  usersToday: number;
+}
+
+export interface UpdateUserRoleResponse {
+  message: string;
+  user: AdminUser;
+}
+export interface AdminUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'user' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserStats {
+  totalUsers: number;
+  adminUsers: number;
+  regularUsers: number;
+  usersToday: number;
+}
+export interface CreateUserResponse {
+  message: string;
+  user: AdminUser;
+}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../contexts/CartContext";
+import ReviewModal from "../components/ReviewModal";
+
 
 interface Item {
   _id: string;
@@ -14,6 +16,8 @@ const categoriesList = ["Pizza", "Burger", "Dessert", "Drinks", "Pasta", "Snacks
 
 const Menu: React.FC = () => {
   const { addToCart, loading } = useCart();
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+
 
   const [items, setItems] = useState<Item[]>([]);
   const [loadingItems, setLoadingItems] = useState(true);
@@ -158,30 +162,41 @@ const Menu: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {items.map((item) => (
-              <div key={item._id} className="bg-white rounded-xl overflow-hidden shadow-md border">
-                <img src={item.imageURL} className="w-full h-48 object-cover" />
+              // Menu.tsx - Update just the item card section
+              <div key={item._id} className="bg-white rounded-xl overflow-hidden shadow-md border hover:shadow-lg transition-shadow">
+                <img src={item.imageURL} className="w-full h-48 object-cover" alt={item.title} />
 
                 <div className="p-4">
-                  <h2 className="text-xl font-semibold">{item.title}</h2>
-                  <p className="text-gray-600 text-sm">{item.description}</p>
+                  <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{item.description}</p>
 
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-lg font-bold">${item.price}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-green-700">${item.price}</span>
 
-                    <button
-                      onClick={() =>
-                        addToCart({
-                          menuItemId: item._id,
-                          name: item.title,
-                          price: item.price,
-                          image: item.imageURL,
-                          quantity: 1,
-                        })
-                      }
-                      className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                    >
-                      Add
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() =>
+                          addToCart({
+                            menuItemId: item._id,
+                            name: item.title,
+                            price: item.price,
+                            image: item.imageURL,
+                            quantity: 1,
+                          })
+                        }
+                        disabled={loading}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition disabled:opacity-50"
+                      >
+                        {loading ? "Adding..." : "Add to Cart"}
+                      </button>
+
+                      <button
+                        onClick={() => setSelectedItem(item)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm font-medium transition"
+                      >
+                        Reviews
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -213,8 +228,18 @@ const Menu: React.FC = () => {
         </div>
 
       </main>
+      {/* REVIEW MODAL */}
+      {selectedItem && (
+        <ReviewModal
+          menuItem={selectedItem}
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
     </div>
   );
+
+
 };
+
 
 export default Menu;

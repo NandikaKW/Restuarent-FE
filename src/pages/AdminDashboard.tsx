@@ -3,11 +3,17 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import OrderManagement from './admin/OrderManagement';
 import MenuManagement from './admin/MenuManagement';
+import UserManagement from './admin/UserManagement';
+import ReviewManagement from './admin/ReviewManagement';
+
 
 const AdminDashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'analytics'>('orders');
+  const [activeTab, setActiveTab] = useState<
+    'orders' | 'menu' | 'users' | 'reviews' | 'analytics'
+  >('orders');
+
 
   const handleLogout = () => {
     logout();
@@ -59,19 +65,21 @@ const AdminDashboard: React.FC = () => {
               {[
                 { id: 'orders', name: 'Order Management' },
                 { id: 'menu', name: 'Menu Management' },
+                { id: 'users', name: 'User Management' },
+                { id: 'reviews', name: 'Review Management' },
                 { id: 'analytics', name: 'Analytics' },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === tab.id
+                  className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                       ? 'border-green-500 text-green-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   {tab.name}
                 </button>
+
               ))}
             </nav>
           </div>
@@ -80,6 +88,8 @@ const AdminDashboard: React.FC = () => {
           <div className="mt-6">
             {activeTab === 'orders' && <OrderManagement />}
             {activeTab === 'menu' && <MenuManagement />}
+            {activeTab === 'users' && <UserManagement />}
+            {activeTab === 'reviews' && <ReviewManagement />}
             {activeTab === 'analytics' && (
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Analytics</h2>
