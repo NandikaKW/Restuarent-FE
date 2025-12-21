@@ -1,0 +1,457 @@
+/* src/components/SignupPage.css - COMPACT VERSION */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* ========== COMPACT CONTAINER ========== */
+.signup-compact-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+}
+
+.signup-compact-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 212, 13, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(243, 39, 76, 0.05) 0%, transparent 20%);
+  z-index: 0;
+}
+
+/* ========== COMPACT CARD ========== */
+.signup-compact-card {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.08),
+    0 5px 20px rgba(255, 212, 13, 0.1);
+  border: 1px solid rgba(255, 212, 13, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.signup-compact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.12),
+    0 8px 25px rgba(255, 212, 13, 0.15);
+}
+
+/* ========== HEADER ========== */
+.signup-compact-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  color: #ffd40d;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-container h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.signup-compact-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.signup-tagline-compact {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ========== ERROR MESSAGE ========== */
+.signup-error-compact {
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.08), rgba(255, 107, 139, 0.04));
+  border: 1px solid rgba(243, 39, 76, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #f3274c;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.3s ease;
+}
+
+.signup-error-compact i {
+  font-size: 16px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== FORM STYLES ========== */
+.signup-form-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.name-inputs-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.input-group-compact {
+  position: relative;
+}
+
+.form-input-compact {
+  width: 100%;
+  padding: 14px 45px 14px 16px;
+  border: 1.5px solid #e1e5e9;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.2s ease;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input-compact::placeholder {
+  color: #99a1b3;
+  font-weight: 400;
+}
+
+.form-input-compact:focus {
+  border-color: #ffd40d;
+  box-shadow: 0 0 0 3px rgba(255, 212, 13, 0.15);
+}
+
+.input-icon-compact {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #99a1b3;
+  font-size: 16px;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.form-input-compact:focus + .input-icon-compact {
+  color: #f3274c;
+}
+
+/* ========== PASSWORD STRENGTH ========== */
+.password-strength-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+
+.strength-indicator {
+  display: flex;
+  gap: 6px;
+}
+
+.strength-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e1e5e9;
+  transition: all 0.3s ease;
+}
+
+.strength-dot.weak {
+  background: #f3274c;
+}
+
+.strength-dot.medium {
+  background: #ff9500;
+}
+
+.strength-dot.strong {
+  background: #00b894;
+}
+
+.strength-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.strength-text.weak {
+  color: #f3274c;
+}
+
+.strength-text.medium {
+  color: #ff9500;
+}
+
+.strength-text.strong {
+  color: #00b894;
+}
+
+/* ========== SUBMIT BUTTON ========== */
+.submit-button-compact {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(243, 39, 76, 0.2);
+}
+
+.submit-button-compact:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(243, 39, 76, 0.3);
+}
+
+.submit-button-compact:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button-compact:disabled {
+  background: linear-gradient(135deg, #ccc, #ddd);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.button-loader-compact {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== TERMS AGREEMENT ========== */
+.terms-agreement {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.terms-agreement p {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.terms-agreement a {
+  color: #f3274c;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.terms-agreement a:hover {
+  color: #ff6b8b;
+  text-decoration: underline;
+}
+
+/* ========== LOGIN LINK ========== */
+.login-link-section-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e1e5e9;
+}
+
+.login-link-section-compact span {
+  font-size: 14px;
+  color: #666;
+}
+
+.login-link-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f3274c;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(243, 39, 76, 0.05);
+  border: 1px solid rgba(243, 39, 76, 0.2);
+  transition: all 0.2s ease;
+}
+
+.login-link-compact:hover {
+  background: rgba(243, 39, 76, 0.1);
+  border-color: rgba(243, 39, 76, 0.3);
+  transform: translateY(-1px);
+}
+
+.login-link-compact i {
+  font-size: 12px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 600px) {
+  .signup-compact-card {
+    padding: 30px 24px;
+    margin: 10px;
+  }
+  
+  .signup-compact-header h2 {
+    font-size: 24px;
+  }
+  
+  .name-inputs-compact {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .form-input-compact {
+    padding: 12px 42px 12px 16px;
+    font-size: 14px;
+  }
+  
+  .submit-button-compact {
+    padding: 14px;
+    font-size: 15px;
+  }
+  
+  .login-link-section-compact {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .logo-container h1 {
+    font-size: 20px;
+  }
+  
+  .signup-compact-header h2 {
+    font-size: 22px;
+  }
+  
+  .signup-compact-card {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+}
+
+/* ========== FORM VALIDATION STATES ========== */
+.form-input-compact.valid {
+  border-color: #00b894;
+  background-color: rgba(0, 184, 148, 0.02);
+}
+
+.form-input-compact.invalid {
+  border-color: #f3274c;
+  background-color: rgba(243, 39, 76, 0.02);
+}
+
+/* ========== DECORATIVE ELEMENTS ========== */
+.signup-compact-card::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(255, 212, 13, 0.1) 25%,
+    rgba(243, 39, 76, 0.1) 50%,
+    rgba(255, 212, 13, 0.1) 75%,
+    transparent 100%);
+  border-radius: 25px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.signup-compact-card:hover::after {
+  opacity: 1;
+}
+
+/* ========== LOADING STATE ENHANCEMENTS ========== */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.submit-button-compact:disabled {
+  animation: pulse 2s infinite;
+}

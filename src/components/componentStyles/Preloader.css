@@ -1,0 +1,152 @@
+
+.preloader * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body .preloader {
+  width: 100vw;
+  height: 100vh;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed !important;
+  z-index: 999999 !important;
+  left: 0;
+  top: 0;
+  transition: top 1s ease, opacity 1s ease;
+  background: linear-gradient(135deg, #f3274c 0%, #ff6b8b 100%);
+  overflow: hidden;
+  pointer-events: all !important;
+}
+
+.preloader .container {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  filter: url('#goo');
+  animation: preloader-rotate-move 2s ease-in-out infinite;
+  isolation: isolate;
+}
+
+.preloader .dot {
+  width: 70px !important;
+  height: 70px !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto !important;
+  transform-origin: center !important;
+}
+
+.preloader .dot-1 {
+  background-color: #fff !important;
+  animation: preloader-dot-1-move 2s ease infinite, preloader-index 6s ease infinite !important;
+}
+
+.preloader .dot-2 {
+  background-color: #ffd40d !important;
+  animation: preloader-dot-2-move 2s ease infinite, preloader-index 6s -2s ease infinite !important;
+}
+
+.preloader .dot-3 {
+  background-color: #000 !important;
+  animation: preloader-dot-3-move 2s ease infinite, preloader-index 6s -4s ease infinite !important;
+}
+
+@keyframes preloader-dot-1-move {
+  20% { transform: scale(1); }
+  45% { transform: translate(16px, 12px) scale(.45); }
+  60% { transform: translate(80px, 60px) scale(.45); }
+  80% { transform: translate(80px, 60px) scale(.45); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes preloader-dot-2-move {
+  20% { transform: scale(1); }
+  45% { transform: translate(-16px, 12px) scale(.45); }
+  60% { transform: translate(-80px, 60px) scale(.45); }
+  80% { transform: translate(-80px, 60px) scale(.45); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes preloader-dot-3-move {
+  20% { transform: scale(1); }
+  45% { transform: translateY(-18px) scale(.45); }
+  60% { transform: translateY(-90px) scale(.45); }
+  80% { transform: translateY(-90px) scale(.45); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes preloader-rotate-move {
+  55% { transform: rotate(0deg); }
+  80% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes preloader-index {
+  0%, 100% { z-index: 3; }
+  33.3% { z-index: 2; }
+  66.6% { z-index: 1; }
+}
+
+.preloader .loading-text {
+  margin-top: 40px;
+  font-family: 'Fredoka One', cursive !important;
+  font-size: 2.5rem !important;
+  color: rgb(6, 0, 0) !important;
+  display: flex !important;
+  gap: 3px !important;
+  isolation: isolate;
+}
+
+.preloader .loading-text span {
+  display: inline-block !important;
+  animation: preloader-bounce 0.8s infinite alternate !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  transform-origin: center !important;
+}
+
+.preloader .loading-text span:nth-child(1) { animation-delay: 0.1s !important; }
+.preloader .loading-text span:nth-child(2) { animation-delay: 0.2s !important; }
+.preloader .loading-text span:nth-child(3) { animation-delay: 0.3s !important; }
+.preloader .loading-text span:nth-child(4) { animation-delay: 0.4s !important; }
+.preloader .loading-text span:nth-child(5) { animation-delay: 0.5s !important; }
+.preloader .loading-text span:nth-child(6) { animation-delay: 0.6s !important; }
+.preloader .loading-text span:nth-child(7) { animation-delay: 0.7s !important; }
+.preloader .loading-text span:nth-child(8) { animation-delay: 0.8s !important; }
+.preloader .loading-text span:nth-child(9) { animation-delay: 0.9s !important; }
+.preloader .loading-text span:nth-child(10) { animation-delay: 1.0s !important; }
+.preloader .loading-text span:nth-child(11) { animation-delay: 1.1s !important; }
+.preloader .loading-text span:nth-child(12) { animation-delay: 1.2s !important; }
+.preloader .loading-text span:nth-child(13) { animation-delay: 1.3s !important; }
+.preloader .loading-text span:nth-child(14) { animation-delay: 1.4s !important; }
+
+@keyframes preloader-bounce {
+  from {
+    transform: translateY(0) !important;
+  }
+  to {
+    transform: translateY(-20px) !important;
+  }
+}
+
+body.page-loaded .preloader {
+  top: -100vh !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -999999 !important;
+  transition: top 1s ease, opacity 1s ease !important;
+}
+
+preloader-goo-svg {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}

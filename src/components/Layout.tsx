@@ -33,6 +33,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Menu
                 </button>
                 {/* Add Order History link */}
+                 <button
+                  onClick={() => navigate('/booking')}
+                  className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
+                >
+                  Book Table
+                </button>
                 <button
                   onClick={() => navigate('/orders')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition duration-200"

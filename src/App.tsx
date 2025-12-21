@@ -12,6 +12,9 @@ import Menu from './pages/Menu';
 import OrderHistory from './pages/OrderHistory';
 import AdminDashboard from './pages/AdminDashboard';
 import { useAuth } from './contexts/AuthContext';
+import Booking from './pages/Booking';
+import { BookingProvider } from './contexts/BookingContext';
+
 
 
 function AppRoutes() {
@@ -19,6 +22,20 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route
+        path="/booking"
+        element={
+          <ProtectedRoute>
+            {user?.role === 'admin' ? (
+              <Navigate to="/admin" replace />
+            ) : (
+              <Layout>
+                <Booking />
+              </Layout>
+            )}
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/login"
         element={!user ? <Login /> : <Navigate to={user.role === 'admin' ? "/admin" : "/dashboard"} replace />}
@@ -116,8 +133,9 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <OrderProvider>
-          {/* Add ReviewProvider here */}
-          <AppRoutes />
+          <BookingProvider> {/* Add this provider */}
+            <AppRoutes />
+          </BookingProvider>
         </OrderProvider>
       </CartProvider>
     </AuthProvider>

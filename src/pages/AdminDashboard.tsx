@@ -5,13 +5,14 @@ import OrderManagement from './admin/OrderManagement';
 import MenuManagement from './admin/MenuManagement';
 import UserManagement from './admin/UserManagement';
 import ReviewManagement from './admin/ReviewManagement';
+import BookingManagement from './admin/BookingManagement';
 
 
 const AdminDashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
-    'orders' | 'menu' | 'users' | 'reviews' | 'analytics'
+    'orders' | 'menu' | 'users' | 'reviews' | 'analytics' | 'bookings'
   >('orders');
 
 
@@ -67,6 +68,7 @@ const AdminDashboard: React.FC = () => {
                 { id: 'menu', name: 'Menu Management' },
                 { id: 'users', name: 'User Management' },
                 { id: 'reviews', name: 'Review Management' },
+                { id: 'bookings', name: 'Booking Management' },
                 { id: 'analytics', name: 'Analytics' },
               ].map((tab) => (
                 <button
@@ -90,6 +92,7 @@ const AdminDashboard: React.FC = () => {
             {activeTab === 'menu' && <MenuManagement />}
             {activeTab === 'users' && <UserManagement />}
             {activeTab === 'reviews' && <ReviewManagement />}
+            {activeTab === 'bookings' && <BookingManagement />}
             {activeTab === 'analytics' && (
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Analytics</h2>

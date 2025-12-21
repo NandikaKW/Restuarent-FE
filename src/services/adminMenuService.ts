@@ -25,4 +25,11 @@ export const adminMenuService = {
     const res = await api.delete(`/admin/menu/${id}`);
     return res.data;
   },
+  updateMenuItem: async (id: string, data: FormData) => {
+  const res = await api.put(`/admin/menu/${id}`, data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+},
+
 };

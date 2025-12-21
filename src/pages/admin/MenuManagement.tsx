@@ -6,6 +6,7 @@ const MenuManagement: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   // pagination state
   const [page, setPage] = useState(1);
@@ -63,18 +64,42 @@ const MenuManagement: React.FC = () => {
     }
   };
 
-const handleDelete = async (id: string) => {
-  if (!confirm("Are you sure you want to delete this menu item?")) return;
-  
-  try {
-    await adminMenuService.deleteMenuItem(id);
-    // Refresh the current page after successful deletion
-    fetchMenuItems(page);
-  } catch (err: any) {
-    console.error("Delete error:", err);
-    alert("Failed to delete menu item");
-  }
-};
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this menu item?")) return;
+
+    try {
+      await adminMenuService.deleteMenuItem(id);
+      // Refresh the current page after successful deletion
+      fetchMenuItems(page);
+    } catch (err: any) {
+      console.error("Delete error:", err);
+      alert("Failed to delete menu item");
+    }
+  };
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedItem) return;
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+
+    if (image) formData.append("image", image);
+
+    try {
+      await adminMenuService.updateMenuItem(selectedItem._id, formData);
+      setSelectedItem(null);
+      fetchMenuItems(page);
+      setTitle("");
+      setDescription("");
+      setPrice("");
+      setImage(null);
+    } catch (err) {
+      alert("Failed to update menu item");
+    }
+  };
+
 
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-8">
@@ -82,7 +107,7 @@ const handleDelete = async (id: string) => {
 
       {/* Form */}
       <form
-        onSubmit={handleCreate}
+        onSubmit={selectedItem ? handleUpdate : handleCreate}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
         <div className="space-y-4">
@@ -119,8 +144,9 @@ const handleDelete = async (id: string) => {
             type="submit"
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium"
           >
-            Add Menu Item
+            {selectedItem ? "Update Item" : "Add Menu Item"}
           </button>
+
         </div>
       </form>
 
@@ -165,6 +191,20 @@ const handleDelete = async (id: string) => {
                     >
                       Delete
                     </button>
+                    <button 
+                    style={{marginLeft: "10px"}}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setTitle(item.title);
+                        setDescription(item.description || "");
+                        setPrice(item.price.toString());
+                        setImage(null);
+                      }}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm mr-2" 
+                    >
+                      Edit
+                    </button>
+
                   </td>
                 </tr>
               ))}
@@ -177,11 +217,10 @@ const handleDelete = async (id: string) => {
             <button
               disabled={page === 1}
               onClick={() => setPage((prev) => prev - 1)}
-              className={`px-4 py-2 rounded ${
-                page === 1
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-600 text-white"
-              }`}
+              className={`px-4 py-2 rounded ${page === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-600 text-white"
+                }`}
             >
               Prev
             </button>
@@ -193,11 +232,10 @@ const handleDelete = async (id: string) => {
             <button
               disabled={page === totalPages}
               onClick={() => setPage((prev) => prev + 1)}
-              className={`px-4 py-2 rounded ${
-                page === totalPages
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-blue-600 text-white"
-              }`}
+              className={`px-4 py-2 rounded ${page === totalPages
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-600 text-white"
+                }`}
             >
               Next
             </button>

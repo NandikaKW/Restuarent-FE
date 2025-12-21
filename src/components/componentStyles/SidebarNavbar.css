@@ -1,0 +1,628 @@
+/* src/components/componentStyles/SidebarNavbar.css */
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 1001;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 5px 20px rgba(243, 39, 76, 0.3);
+}
+
+.hamburger-menu:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(243, 39, 76, 0.4);
+}
+
+.hamburger-menu.open {
+  background: linear-gradient(135deg, #000, #333);
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu.open .hamburger-line {
+  opacity: 0;
+}
+
+/* Close Icon inside Hamburger */
+.close-icon {
+  color: white;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-menu:hover .close-icon {
+  transform: scale(1.1);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Sidebar Navigation */
+.sidebar-navbar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-navbar.open {
+  right: 0;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  padding: 40px 30px 20px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.restaurant-logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-circle {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: pulseLogo 2s infinite;
+}
+
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.logo-circle i {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.restaurant-info h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: white;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tagline {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 5px 0 10px;
+}
+
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.rating-badge i {
+  color: #ffd40d;
+  font-size: 0.9rem;
+}
+
+.rating-badge span {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  color: white;
+}
+
+/* Sidebar Content */
+.sidebar-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.nav-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: #000;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ffd40d;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title i {
+  color: #f3274c;
+}
+
+/* Navigation Items */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 212, 13, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.nav-item:hover {
+  transform: translateX(5px);
+  border-color: #ffd40d;
+  box-shadow: 0 5px 20px rgba(255, 212, 13, 0.2);
+}
+
+.nav-item:hover::before {
+  left: 100%;
+}
+
+.nav-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #ffd40d, #ffed4e);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover .nav-icon {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  transform: scale(1.1);
+}
+
+.nav-icon i {
+  color: #000;
+  font-size: 1.2rem;
+}
+
+.nav-item:hover .nav-icon i {
+  color: white;
+}
+
+.nav-text {
+  flex: 1;
+}
+
+.nav-text h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: #000;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.nav-text p {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 3px 0 0;
+  line-height: 1.3;
+}
+
+.nav-arrow {
+  color: #ccc;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover .nav-arrow {
+  color: #f3274c;
+  transform: translateX(5px);
+}
+
+/* Highlight Items */
+.highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 212, 13, 0.08);
+  border-radius: 15px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.highlight-item:hover {
+  background: rgba(255, 212, 13, 0.15);
+  transform: translateX(5px);
+}
+
+.highlight-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.highlight-icon i {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.highlight-text h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: #000;
+  margin: 0;
+}
+
+.highlight-text p {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 3px 0 0;
+}
+
+/* Special Item */
+.special-item {
+  background: linear-gradient(135deg, #000, #333);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.special-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.special-info {
+  padding: 15px;
+}
+
+.special-info h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: white;
+  margin: 0;
+}
+
+.special-info p {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 5px 0;
+}
+
+.special-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #ffd40d;
+}
+
+.discount {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.8rem;
+  color: white;
+  background: #f3274c;
+  padding: 3px 10px;
+  border-radius: 15px;
+}
+
+/* CTA Section */
+.cta-section {
+  margin-top: 30px;
+}
+
+.book-table-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  text-decoration: none;
+  border-radius: 15px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-table-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.book-table-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(243, 39, 76, 0.4);
+}
+
+.book-table-btn:hover::before {
+  left: 100%;
+}
+
+.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link span {
+  color: #f3274c;
+  font-weight: 600;
+}
+
+.login-link:hover {
+  color: #000;
+}
+
+.login-link:hover span {
+  color: #ff6b8b;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 20px 30px;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-top: 2px solid #ffd40d;
+}
+
+.contact-info {
+  margin-bottom: 20px;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.contact-info i {
+  color: #f3274c;
+  width: 20px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ffd40d, #ffed4e);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  transform: translateY(-3px);
+  color: white;
+}
+/* Update nav-item to work with buttons */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+/* Update buttons in CTA section */
+.book-table-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  text-decoration: none;
+  border-radius: 15px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+}
+
+.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar-navbar {
+    width: 320px;
+    right: -320px;
+  }
+  
+  .sidebar-header {
+    padding: 30px 20px 20px;
+  }
+  
+  .sidebar-content {
+    padding: 20px;
+  }
+  
+  .hamburger-menu {
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-navbar {
+    width: 280px;
+    right: -280px;
+  }
+  
+  .restaurant-info h2 {
+    font-size: 1.5rem;
+  }
+  
+  .nav-item {
+    padding: 12px;
+  }
+  
+  .nav-icon {
+    width: 40px;
+    height: 40px;
+  }
+}

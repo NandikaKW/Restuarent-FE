@@ -1,0 +1,560 @@
+/* OrderHistory.css - Simplified Version */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap');
+
+/* ========== ORDER MAIN CONTAINER ========== */
+.order-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  font-family: 'Epilogue', sans-serif;
+  padding: 0;
+  position: relative;
+}
+
+/* Hero Section */
+.order-hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+              url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 100px 0 60px;
+  color: white;
+  text-align: center;
+}
+
+.order-hero h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.order-hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Main Content */
+.order-main {
+  padding: 60px 0 80px;
+}
+
+.order-main .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Order Actions */
+.order-actions {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.menu-btn {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.2);
+}
+
+.menu-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(243, 39, 76, 0.3);
+  color: white;
+}
+
+.menu-btn:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #f3274c;
+  border-radius: 12px;
+  top: 5px;
+  left: 5px;
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.menu-btn:hover:before {
+  top: 2px;
+  left: 2px;
+}
+
+/* Orders Section */
+.orders-section {
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  margin-bottom: 40px;
+}
+
+.orders-section h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: #000;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.orders-section h2:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #f3274c, #ffd40d);
+  border-radius: 2px;
+}
+
+/* Orders Table */
+.orders-table-container {
+  overflow-x: auto;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: 'Epilogue', sans-serif;
+}
+
+.orders-table thead {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+}
+
+.orders-table th {
+  padding: 18px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.orders-table th:first-child {
+  border-top-left-radius: 15px;
+}
+
+.orders-table th:last-child {
+  border-top-right-radius: 15px;
+}
+
+.orders-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.orders-table tbody tr:nth-child(even) {
+  background: rgba(243, 39, 76, 0.02);
+}
+
+.orders-table tbody tr:hover {
+  background: rgba(243, 39, 76, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.orders-table td {
+  padding: 20px;
+  color: #333;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Order ID */
+.order-id-display {
+  font-weight: 600;
+  color: #000;
+  font-size: 1.1rem;
+  font-family: 'Fredoka One', cursive;
+}
+
+/* Date & Time */
+.order-date {
+  font-weight: 600;
+  color: #000;
+  font-size: 1rem;
+}
+
+.order-time {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.order-time i {
+  color: #f3274c;
+}
+
+/* Order Items */
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 250px;
+}
+
+.item-name {
+  background: rgba(243, 39, 76, 0.05);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.more-items {
+  color: #666;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Order Total */
+.order-total {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: #000;
+  font-weight: 600;
+}
+
+/* Status Badge */
+.order-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+  color: #4CAF50;
+}
+
+.status-preparing {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 235, 59, 0.1));
+  color: #FF9800;
+}
+
+.status-pending {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(3, 169, 244, 0.1));
+  color: #2196F3;
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(239, 83, 80, 0.1));
+  color: #F44336;
+}
+
+/* Empty State */
+.empty-orders {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.empty-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, 
+    rgba(243, 39, 76, 0.1) 0%,
+    rgba(255, 212, 13, 0.1) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  border: 3px dashed #f3274c;
+}
+
+.empty-icon i {
+  font-size: 3rem;
+  color: #f3274c;
+}
+
+.empty-orders h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.empty-orders p {
+  color: #666;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin: 0 auto 25px;
+  line-height: 1.6;
+}
+
+.start-shopping-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.start-shopping-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.2);
+  color: white;
+}
+
+/* Restaurant Info */
+.restaurant-info {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  padding: 25px;
+  border-radius: 20px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.restaurant-info h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.restaurant-info p {
+  margin: 8px 0;
+  opacity: 0.9;
+}
+
+.restaurant-info strong {
+  color: #ffd40d;
+}
+
+/* Loading State */
+.order-loading {
+  text-align: center;
+  padding: 100px 0;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(243, 39, 76, 0.1);
+  border-radius: 50%;
+  border-top-color: #f3274c;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.order-loading p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Error State */
+.order-error {
+  text-align: center;
+  padding: 100px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: #f3274c;
+  margin-bottom: 20px;
+}
+
+.order-error h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.order-error p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.retry-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .order-hero h1 {
+    font-size: 2.8rem;
+  }
+  
+  .orders-section {
+    padding: 30px;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 15px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-hero {
+    padding: 80px 0 40px;
+  }
+  
+  .order-hero h1 {
+    font-size: 2.3rem;
+  }
+  
+  .orders-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .menu-btn,
+  .start-shopping-btn,
+  .retry-btn {
+    padding: 14px 30px;
+    font-size: 1rem;
+  }
+  
+  .orders-table {
+    display: block;
+  }
+  
+  .orders-table thead {
+    display: none;
+  }
+  
+  .orders-table tbody tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    background: white;
+  }
+  
+  .orders-table tbody tr:hover {
+    transform: translateY(-2px);
+  }
+  
+  .orders-table td {
+    display: block;
+    text-align: right;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .orders-table td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .orders-table td:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .orders-section {
+    padding: 25px 20px;
+    border-radius: 20px;
+  }
+  
+  .order-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .order-hero p {
+    font-size: 1rem;
+  }
+  
+  .empty-orders {
+    padding: 40px 20px;
+  }
+  
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .empty-icon i {
+    font-size: 2.5rem;
+  }
+  
+  .empty-orders h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Custom Scrollbar */
+.orders-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.orders-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.orders-table-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border-radius: 4px;
+}
+
+.orders-table-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #d11d40, #e55976);
+}

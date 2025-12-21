@@ -9,7 +9,7 @@ const OrderHistory: React.FC = () => {
     getOrderHistory();
   }, []);
 
-  // Safe function to get order display ID
+  
   const getOrderDisplayId = (order: any) => {
     // Try _id first (MongoDB), then id, then fallback
     const orderId = order?._id || order?.id;
