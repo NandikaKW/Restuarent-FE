@@ -3,12 +3,14 @@ import { useCart } from '../contexts/CartContext';
 import { useOrder } from '../contexts/OrderContext';
 import { useState, useEffect } from 'react';
 import CartItem from '../components/CartItem';
+import PaymentPopup from '../components/PaymentPopup';
 
 const Cart: React.FC = () => {
   const { cart, loading: cartLoading, clearCart, refreshCart, error: cartError, clearError } = useCart();
   const { placeOrder, loading: orderLoading, error: orderError } = useOrder();
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [placedOrder, setPlacedOrder] = useState<any>(null);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
   const loading = cartLoading || orderLoading;
   const error = cartError || orderError;
@@ -26,8 +28,7 @@ const Cart: React.FC = () => {
     try {
       const order = await placeOrder();
       setPlacedOrder(order);
-      setCheckoutSuccess(true);
-      await refreshCart();
+      setShowPaymentPopup(true); // Show payment popup
     } catch (error) {
       console.error('Checkout failed:', error);
     }
@@ -35,9 +36,15 @@ const Cart: React.FC = () => {
 
   // Safe function to get order display ID
   const getOrderDisplayId = (order: any) => {
-    // Try _id first (MongoDB), then id, then fallback
     const orderId = order?._id || order?.id;
     return orderId ? `#${orderId.slice(-6)}` : '#------';
+  };
+
+  // Handle payment success
+  const handlePaymentSuccess = (paymentId: string) => {
+    setShowPaymentPopup(false);
+    setCheckoutSuccess(true);
+    refreshCart(); // Clear cart after successful payment
   };
 
   // Show error message if any
@@ -67,7 +74,71 @@ const Cart: React.FC = () => {
     );
   }
 
-  // Success message after order placement
+  // Show payment popup if needed
+  if (showPaymentPopup && placedOrder) {
+    return (
+      <>
+        <PaymentPopup
+          orderId={placedOrder._id || placedOrder.id}
+          amount={placedOrder.totalPrice}
+          onClose={() => setShowPaymentPopup(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+        {/* Blurred background */}
+        <div className="min-h-screen bg-gray-50 py-8">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 blur-sm">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+              <button
+                onClick={clearCart}
+                disabled={loading}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 transition duration-200"
+              >
+                Clear Cart
+              </button>
+            </div>
+
+            <div className="space-y-4 mb-8">
+              {/* Loops through each item in the cart and creates a component for it. */}
+              {cart?.items.map((item) => (
+                <CartItem key={item.menuItemId} item={item} />
+              ))}
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xl font-semibold text-gray-900">Total Items:</span>
+                <span className="text-xl font-bold text-gray-900">{cart?.totalItems}</span>
+              </div>
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-2xl font-bold text-gray-900">Total Price:</span>
+                <span className="text-2xl font-bold text-blue-600">
+                  ${cart?.totalPrice.toFixed(2)}
+                </span>
+              </div>
+              <div className="mt-6 flex space-x-4">
+                <Link
+                  to="/menu"
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200"
+                >
+                  Continue Shopping
+                </Link>
+                <button 
+                  onClick={handleCheckout}
+                  disabled={loading}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium disabled:opacity-50 transition duration-200"
+                >
+                  {loading ? 'Placing Order...' : 'Place Order'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Success message after payment
   if (checkoutSuccess && placedOrder) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
@@ -78,12 +149,12 @@ const Cart: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
             <p className="text-gray-600 mb-4">
               Thank you for your order. Your order number is <strong>{getOrderDisplayId(placedOrder)}</strong>
             </p>
             <p className="text-gray-600 mb-6">
-              Total: <strong>${placedOrder.totalPrice?.toFixed(2) || '0.00'}</strong>
+              Total Paid: <strong>${placedOrder.totalPrice?.toFixed(2) || '0.00'}</strong>
             </p>
             <div className="flex space-x-4 justify-center">
               <Link
@@ -183,9 +254,12 @@ const Cart: React.FC = () => {
               disabled={loading}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium disabled:opacity-50 transition duration-200"
             >
-              {loading ? 'Placing Order...' : 'Place Order'}
+              {loading ? 'Processing...' : 'Proceed to Payment'}
             </button>
           </div>
+          <p className="text-sm text-gray-500 mt-4 text-center">
+            You'll be redirected to secure payment after clicking "Proceed to Payment"
+          </p>
         </div>
       </div>
     </div>

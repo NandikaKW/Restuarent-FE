@@ -1,8 +1,7 @@
-// components/ReviewList.tsx
 import React from "react";
 import StarRating from "./StarRating";
 import type { Review } from "../types/review";
-// import { FaUserCircle } from "react-icons/fa";
+import '../components/componentStyles/ReviewList.css';
 
 interface Props {
   reviews: Review[];
@@ -37,7 +36,7 @@ const ReviewList: React.FC<Props> = ({ reviews }) => {
       
       if (review.userId.email) {
         const email = review.userId.email;
-        return email.split('@')[0]; // Show username part of email
+        return email.split('@')[0];
       }
     }
     
@@ -53,104 +52,139 @@ const ReviewList: React.FC<Props> = ({ reviews }) => {
     return name.substring(0, 2).toUpperCase();
   };
 
-  const getRatingText = (rating: number): string => {
-    const ratings = {
+  const getRatingInfo = (rating: number) => {
+    const ratingTexts: { [key: number]: string } = {
       5: "Excellent",
-      4: "Good", 
-      3: "Average",
-      2: "Poor",
-      1: "Terrible"
+      4: "Very Good", 
+      3: "Good",
+      2: "Fair",
+      1: "Poor"
     };
-    return ratings[rating as keyof typeof ratings] || "Rated";
+    
+    let colorClass = "text-red-600";
+    if (rating >= 4.5) colorClass = "text-green-600";
+    else if (rating >= 3.5) colorClass = "text-yellow-600";
+    else if (rating >= 2.5) colorClass = "text-orange-600";
+    
+    return {
+      text: ratingTexts[rating] || "Rated",
+      colorClass
+    };
+  };
+
+  const handleHelpful = (reviewId: string) => {
+    alert(`Thanks for marking review ${reviewId} as helpful!`);
+  };
+
+  const handleReport = (reviewId: string) => {
+    alert(`Reported review ${reviewId} to admin`);
   };
 
   return (
-    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+    <div className="review-list-container">
       {reviews.length === 0 ? (
-        <div className="text-center py-8 border rounded-lg bg-gray-50">
-          <div className="text-gray-400 text-4xl mb-2">📝</div>
-          <h3 className="font-medium text-gray-600">No reviews yet</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Be the first to share your experience!
+        <div className="review-empty-state">
+          <div className="review-empty-icon">
+            <i className="fa-solid fa-comment-dots"></i>
+          </div>
+          <h3 className="review-empty-title">No Reviews Yet</h3>
+          <p className="review-empty-text">
+            Be the first to share your experience with this item!
           </p>
         </div>
       ) : (
-        reviews.map((review) => (
-          <div 
-            key={review._id} 
-            className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow"
-          >
-            {/* User Info & Rating Header */}
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                  {getUserInitials(review)}
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">
-                    {getUserName(review)}
+        <div className="review-items-grid">
+          {reviews.map((review) => {
+            const userName = getUserName(review);
+            const userInitials = getUserInitials(review);
+            const formattedDate = formatDate(review.createdAt);
+            const ratingInfo = getRatingInfo(review.rating);
+            
+            return (
+              <div key={review._id} className="review-card">
+                {/* Header */}
+                <div className="review-header">
+                  <div className="review-user">
+                    <div className="review-avatar">
+                      {userInitials}
+                    </div>
+                    <div className="review-user-info">
+                      <h4 className="review-user-name">{userName}</h4>
+                      <div className="review-meta">
+                        <span className="review-date">
+                          <i className="fa-solid fa-calendar-days"></i>
+                          {formattedDate}
+                        </span>
+                        {review.status === "approved" && (
+                          <span className="review-verified">
+                            <i className="fa-solid fa-badge-check"></i>
+                            Verified
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500">
-                      {formatDate(review.createdAt)}
-                    </span>
-                    {review.status === "approved" && (
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                        Verified
+                  
+                  
+                  <div className="review-rating-badge">
+                    <div className="review-rating-score">
+                      <span className={`review-rating-number ${ratingInfo.colorClass}`}>
+                        {review.rating.toFixed(1)}
                       </span>
-                    )}
+                      <span className="review-rating-outof">/5</span>
+                    </div>
+                    <div className="review-rating-text">
+                      {ratingInfo.text}
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Rating Badge */}
-              <div className="text-right">
-                <div className="flex items-center gap-1 mb-1">
-                  <StarRating rating={review.rating} readOnly size={16} />
-                  <span className="text-sm font-semibold text-gray-700">
-                    {review.rating}.0
-                  </span>
+
+                
+                <div className="review-stars">
+                  <StarRating rating={review.rating} readOnly size={18} />
                 </div>
-                <div className="text-xs font-medium text-yellow-600">
-                  {getRatingText(review.rating)}
+
+                
+                {review.comment && (
+                  <div className="review-comment">
+                    <p className="review-comment-text">"{review.comment}"</p>
+                  </div>
+                )}
+
+                
+                <div className="review-actions">
+                  <div className="review-action-buttons">
+                    <button 
+                      className="review-action-btn helpful" 
+                      onClick={() => handleHelpful(review._id)}
+                    >
+                      <i className="fa-solid fa-thumbs-up"></i>
+                      Helpful
+                    </button>
+                    
+                    
+                    <div className="review-action-spacer"></div>
+                    
+                    <button 
+                      className="review-action-btn report" 
+                      onClick={() => handleReport(review._id)}
+                    >
+                      <i className="fa-solid fa-flag"></i>
+                      Report
+                    </button>
+                  </div>
+                  
+                  {review.menuItemSnapshot && (
+                    <div className="review-item-info">
+                      <i className="fa-solid fa-utensils"></i>
+                      <span>{review.menuItemSnapshot.title}</span>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-            
-            {/* Comment */}
-            {review.comment && (
-              <div className="mt-3">
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  "{review.comment}"
-                </p>
-              </div>
-            )}
-            
-            {/* Helpful Actions */}
-            <div className="flex items-center justify-between mt-4 pt-3 border-t">
-              <div className="flex gap-3">
-                <button 
-                  className="text-xs text-gray-500 hover:text-blue-600 flex items-center gap-1"
-                  onClick={() => alert("Thanks for your feedback!")}
-                >
-                  👍 Helpful
-                </button>
-                <button 
-                  className="text-xs text-gray-500 hover:text-blue-600 flex items-center gap-1"
-                  onClick={() => alert("Reported to admin")}
-                >
-                  ⚠️ Report
-                </button>
-              </div>
-              
-              {review.menuItemSnapshot && (
-                <div className="text-xs text-gray-400">
-                  {review.menuItemSnapshot.title}
-                </div>
-              )}
-            </div>
-          </div>
-        ))
+            );
+          })}
+        </div>
       )}
     </div>
   );

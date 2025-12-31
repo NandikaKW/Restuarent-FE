@@ -13,7 +13,7 @@ interface CartContextType {
   removeFromCart: (menuItemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   refreshCart: () => Promise<void>;
-  clearError: () => void; // Added to clear errors
+  clearError: () => void; 
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

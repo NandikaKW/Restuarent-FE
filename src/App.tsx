@@ -14,6 +14,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import { useAuth } from './contexts/AuthContext';
 import Booking from './pages/Booking';
 import { BookingProvider } from './contexts/BookingContext';
+import { PaymentProvider } from './contexts/PaymentContext'; 
+
 
 
 
@@ -133,8 +135,10 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <OrderProvider>
-          <BookingProvider> {/* Add this provider */}
+          <BookingProvider> 
+            <PaymentProvider>
             <AppRoutes />
+            </PaymentProvider>
           </BookingProvider>
         </OrderProvider>
       </CartProvider>

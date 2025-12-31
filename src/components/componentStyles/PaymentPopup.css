@@ -1,0 +1,916 @@
+/* src/components/componentStyles/PaymentPopup.css */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* ========== CUSTOM SCROLLBAR FOR POPUP OVERLAY ========== */
+.payment-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for the overlay */
+.payment-popup-overlay::-webkit-scrollbar {
+  width: 10px;
+}
+
+.payment-popup-overlay::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.payment-popup-overlay::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.payment-popup-overlay::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #388E3C, #689F38);
+}
+
+/* Firefox scrollbar styling */
+.payment-popup-overlay {
+  scrollbar-width: thin;
+  scrollbar-color: #4CAF50 rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========== PAYMENT POPUP CONTAINER - MATCHED TO CART ========== */
+.payment-popup-container {
+  background: white;
+  border-radius: 25px;
+  width: 100%;
+  max-width: 550px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  margin: 20px 0;
+}
+
+/* Custom scrollbar for the popup container */
+.payment-popup-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.payment-popup-container::-webkit-scrollbar-track {
+  background: #f5f8fd;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.payment-popup-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 10px;
+}
+
+.payment-popup-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #388E3C, #689F38);
+}
+
+/* Firefox scrollbar styling for container */
+.payment-popup-container {
+  scrollbar-width: thin;
+  scrollbar-color: #4CAF50 #f5f8fd;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header with gradient border - Matched to Cart */
+.payment-popup-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  border-radius: 25px 25px 0 0;
+  background-size: 400% 100%;
+  animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ========== PAYMENT POPUP HEADER - MATCHED TO CART ========== */
+.payment-popup-header {
+  padding: 40px 40px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #f5f8fd;
+  background: white;
+  border-radius: 25px 25px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.payment-title {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.payment-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0) 100%);
+}
+
+/* SSL Icon - Made more prominent */
+.payment-popup-container .ssl-icon {
+  font-size: 32px !important;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.payment-popup-container .ssl-text-icon {
+  color: #4CAF50;
+  margin-right: 8px;
+  font-size: 0.9rem;
+}
+
+.payment-popup-container .payment-title h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  margin: 0;
+  background: linear-gradient(135deg, #000 0%, #333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.payment-popup-container .payment-subtitle {
+  font-family: 'Epilogue', sans-serif;
+  color: #4CAF50;
+  margin: 8px 0 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.payment-popup-container .payment-close-btn {
+  width: 50px;
+  height: 50px;
+  background: rgba(76, 175, 80, 0.1);
+  border: none;
+  border-radius: 12px;
+  color: #4CAF50;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.payment-popup-container .payment-close-btn:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.2);
+  transform: rotate(90deg);
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.payment-popup-container .payment-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========== ORDER SUMMARY - MATCHED TO CART ========== */
+.payment-popup-container .payment-order-summary {
+  padding: 24px 32px;
+  background: linear-gradient(135deg, 
+    rgba(76, 175, 80, 0.05) 0%,
+    rgba(139, 195, 74, 0.05) 100%);
+  margin: 20px 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(76, 175, 80, 0.1);
+}
+
+.payment-popup-container .summary-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.payment-popup-container .summary-header i {
+  font-size: 20px;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.payment-popup-container .summary-header h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  margin: 0;
+  color: #333;
+}
+
+.payment-popup-container .summary-subtitle {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.payment-popup-container .summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-popup-container .summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.payment-popup-container .summary-row:last-child {
+  border-bottom: none;
+}
+
+.payment-popup-container .summary-label {
+  font-family: 'Epilogue', sans-serif;
+  color: #555;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.payment-popup-container .summary-value {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.payment-popup-container .summary-value.amount {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.payment-popup-container .status-pending {
+  color: #FF9800;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  background: rgba(255, 152, 0, 0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* ========== ERROR MESSAGE - MATCHED TO CART ========== */
+.payment-popup-container .payment-error-message {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 0 32px 24px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  animation: shake 0.5s ease;
+  border: 2px solid rgba(255, 107, 107, 0.2);
+  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.1);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.payment-popup-container .payment-error-message .error-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.payment-popup-container .payment-error-message .error-content i {
+  font-size: 1.8rem;
+  color: #f3274c;
+  flex-shrink: 0;
+}
+
+.payment-popup-container .payment-error-message h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.payment-popup-container .payment-error-message p {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.payment-popup-container .error-dismiss {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-popup-container .error-dismiss:hover {
+  background: rgba(211, 47, 47, 0.1);
+  transform: scale(1.1);
+}
+
+/* ========== PAYMENT FORM ========== */
+.payment-popup-container .payment-form {
+  padding: 0 32px 32px;
+}
+
+/* Section Headers - Matched to Cart */
+.payment-popup-container .section-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f5f8fd;
+}
+
+.payment-popup-container .section-header i {
+  font-size: 22px;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.payment-popup-container .section-header h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  margin: 0;
+  color: #333;
+}
+
+/* Payment Methods Grid - Matched to Cart */
+.payment-popup-container .payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.payment-popup-container .payment-method-card {
+  background: white;
+  border: 2px solid #f5f8fd;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border: none;
+  background: transparent;
+}
+
+.payment-popup-container .payment-method-card:hover {
+  border-color: rgba(76, 175, 80, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.payment-popup-container .payment-method-card.active {
+  background: white;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  box-shadow: 0 10px 20px rgba(76, 175, 80, 0.15);
+}
+
+.payment-popup-container .method-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+}
+
+.payment-popup-container .method-icon i {
+  font-size: 28px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.payment-popup-container .method-icon.paypal {
+  background: linear-gradient(135deg, #003087, #009cde);
+}
+
+.payment-popup-container .method-icon.cash {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+}
+
+.payment-popup-container .method-info h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.payment-popup-container .method-info p {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.payment-popup-container .method-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+}
+
+/* Card Details Form */
+.payment-popup-container .card-details-section {
+  margin-bottom: 40px;
+}
+
+.payment-popup-container .form-group {
+  margin-bottom: 25px;
+}
+
+.payment-popup-container .form-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  display: block;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.payment-popup-container .input-with-icon {
+  position: relative;
+}
+
+.payment-popup-container .input-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+.payment-popup-container .form-input {
+  width: 100%;
+  padding: 18px 20px 18px 50px;
+  border: 2px solid #f5f8fd;
+  border-radius: 15px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1rem;
+  color: #333;
+  background: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.payment-popup-container .form-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.payment-popup-container .form-input::placeholder {
+  color: #aaa;
+}
+
+.payment-popup-container .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.payment-popup-container .card-security-note {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 15px;
+  border: 2px solid rgba(76, 175, 80, 0.1);
+  margin-top: 30px;
+}
+
+.payment-popup-container .card-security-note i {
+  font-size: 1.5rem;
+  color: #4CAF50;
+  flex-shrink: 0;
+}
+
+.payment-popup-container .card-security-note p {
+  font-family: 'Epilogue', sans-serif;
+  color: #4CAF50;
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Payment Method Messages */
+.payment-popup-container .payment-method-message {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+}
+
+.payment-popup-container .paypal-message {
+  background: linear-gradient(135deg, 
+    rgba(0, 48, 135, 0.08) 0%, 
+    rgba(0, 156, 222, 0.08) 100%);
+  border: 2px solid rgba(0, 48, 135, 0.1);
+}
+
+.payment-popup-container .cash-message {
+  background: linear-gradient(135deg, 
+    rgba(76, 175, 80, 0.08) 0%, 
+    rgba(139, 195, 74, 0.08) 100%);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.payment-popup-container .message-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.payment-popup-container .paypal-message .message-icon {
+  background: linear-gradient(135deg, #003087, #009cde);
+}
+
+.payment-popup-container .cash-message .message-icon {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+}
+
+.payment-popup-container .message-icon i {
+  font-size: 28px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.payment-popup-container .message-content h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.payment-popup-container .message-content p {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* ========== PAYMENT ACTIONS - MATCHED TO CART ========== */
+.payment-popup-container .payment-actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* Button Styles - Matched to Cart with Green Border */
+.payment-popup-container .button {
+  padding: 15px 30px;
+  position: relative;
+  border-radius: 12px;
+  color: white;
+  z-index: 111;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  background-color: #4CAF50;
+  border: none;
+  cursor: pointer;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.payment-popup-container .button:hover {
+  color: white;
+  transform: translateY(-2px);
+}
+
+.payment-popup-container .button:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #4CAF50;
+  border-radius: 12px;
+  top: 5px;
+  left: 5px;
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.payment-popup-container .button:hover:before {
+  top: 2px;
+  left: 2px;
+  border-color: #388E3C;
+}
+
+/* Green Border Button - Specific styling */
+.payment-popup-container .green-border-btn {
+  border: 3px solid #4CAF50 !important;
+  background: linear-gradient(135deg, #4CAF50, #8BC34A) !important;
+}
+
+.payment-popup-container .green-border-btn:before {
+  border: 3px solid #388E3C !important;
+}
+
+.payment-popup-container .green-border-btn:hover {
+  border-color: #388E3C !important;
+  background: linear-gradient(135deg, #388E3C, #689F38) !important;
+}
+
+.payment-popup-container .button-outline {
+  background: transparent;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+}
+
+.payment-popup-container .button-outline:hover {
+  background: #4CAF50;
+  color: white;
+}
+
+.payment-popup-container .button-outline:before {
+  display: none;
+}
+
+.payment-popup-container .payment-submit-btn {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  font-size: 1.1rem;
+  padding: 20px;
+}
+
+.payment-popup-container .payment-submit-btn:before {
+  border-color: #4CAF50;
+}
+
+.payment-popup-container .payment-submit-btn:hover {
+  background: linear-gradient(135deg, #388E3C, #689F38);
+}
+
+.payment-popup-container .payment-amount {
+  margin-left: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  backdrop-filter: blur(10px);
+}
+
+/* ========== RESPONSIVE DESIGN - MATCHED TO CART ========== */
+@media (max-width: 768px) {
+  .payment-popup-overlay {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  
+  .payment-popup-container {
+    max-width: 95%;
+    border-radius: 20px;
+    max-height: 90vh;
+    margin: 10px 0;
+  }
+  
+  .payment-popup-container .payment-popup-header,
+  .payment-popup-container .payment-order-summary,
+  .payment-popup-container .payment-form {
+    padding: 25px;
+  }
+  
+  .payment-popup-container .payment-order-summary {
+    margin: 20px 25px;
+  }
+  
+  .payment-popup-container .payment-title {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .payment-popup-container .payment-title h2 {
+    font-size: 1.8rem;
+  }
+  
+  .payment-popup-container .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-popup-container .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .payment-popup-container .payment-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-popup-container .payment-error-message {
+    margin: 0 25px 20px;
+  }
+  
+  .payment-popup-container .ssl-icon {
+    font-size: 28px !important;
+  }
+  
+  .payment-popup-container .payment-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .payment-popup-overlay::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .payment-popup-container::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-popup-container {
+    border-radius: 16px;
+    max-height: 95vh;
+  }
+  
+  .payment-popup-container .payment-popup-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    padding: 25px 25px 15px;
+  }
+  
+  .payment-popup-container .payment-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .payment-popup-container .section-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .payment-popup-container .payment-method-message {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .payment-popup-container .method-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .payment-popup-container .summary-value.amount {
+    font-size: 1.3rem;
+  }
+  
+  .payment-popup-container .payment-subtitle {
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+  
+  .payment-popup-container .payment-actions {
+    gap: 15px;
+  }
+  
+  .payment-popup-container .payment-submit-btn {
+    padding: 18px;
+    font-size: 1rem;
+  }
+}

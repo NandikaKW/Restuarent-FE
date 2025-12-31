@@ -12,7 +12,7 @@ interface OrderContextType {
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
-
+//Acessing the data from a Context.
 export const useOrder = () => {
   const context = useContext(OrderContext);
   if (context === undefined) {
@@ -20,7 +20,7 @@ export const useOrder = () => {
   }
   return context;
 };
-
+//OrderProvider can provide the order context to all the components inside it.
 interface OrderProviderProps {
   children: ReactNode;
 }

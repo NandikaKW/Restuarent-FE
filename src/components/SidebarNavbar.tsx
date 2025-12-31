@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SidebarNavbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); // <-- useNavigate hook
+  const navigate = useNavigate(); 
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -20,7 +20,7 @@ const SidebarNavbar: React.FC = () => {
 
   return (
     <>
-      {/* Hamburger Menu Button */}
+      
       <button 
         className={`hamburger-menu ${isOpen ? 'open' : ''}`}
         onClick={toggleSidebar}
@@ -37,12 +37,12 @@ const SidebarNavbar: React.FC = () => {
         )}
       </button>
 
-      {/* Sidebar Overlay */}
+      
       {isOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
 
-      {/* Sidebar Navigation */}
+      
       <nav className={`sidebar-navbar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header"> ... </div>
 
@@ -53,7 +53,7 @@ const SidebarNavbar: React.FC = () => {
               Explore Our Restaurant
             </h3>
 
-            {/* Home nav item using useNavigate */}
+            
             <div className="nav-item" onClick={goToDashboard}>
               <div className="nav-icon">
                 <i className="fa-solid fa-home"></i>
@@ -88,7 +88,7 @@ const SidebarNavbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Restaurant Highlights */}
+          
           <div className="nav-section">
             <h3 className="section-title">
               <i className="fa-solid fa-award"></i>
@@ -126,7 +126,7 @@ const SidebarNavbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Chef Specials */}
+          
           <div className="nav-section">
             <h3 className="section-title">
               <i className="fa-solid fa-fire"></i>
@@ -150,7 +150,7 @@ const SidebarNavbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Call to Action */}
+          
           <div className="cta-section">
             <Link to="/reservation" className="book-table-btn" onClick={toggleSidebar}>
               <i className="fa-solid fa-calendar-check"></i>

@@ -24,10 +24,18 @@ export interface Order {
   totalPrice: number;
   totalItems: number;
   status: 'pending' | 'preparing' | 'completed' | 'cancelled';
+  paymentId?: string | PaymentInfo;
   createdAt: string;
   updatedAt: string;
 }
-
+export interface PaymentInfo {
+  _id: string;
+  status: 'pending' | 'success' | 'failed';
+  paymentMethod: 'card' | 'paypal' | 'cash';
+  amount: number;
+  createdAt: string;
+  paymentDate?: string;
+}
 export interface OrderItem {
   menuItemId: string;
   name: string;

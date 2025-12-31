@@ -1,0 +1,893 @@
+/* AdminOrderManagement.css - Modern Green Theme */
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&family=Fredoka+One&display=swap');
+
+.om-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+  font-family: 'Epilogue', sans-serif;
+  padding: 25px 20px;
+  animation: om-fadeIn 0.5s ease-out;
+}
+
+@keyframes om-fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.om-header {
+  background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+  border-radius: 18px;
+  padding: 28px 30px;
+  color: white;
+  margin-bottom: 28px;
+  box-shadow: 0 12px 25px rgba(76, 175, 80, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.om-header:before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.3;
+  animation: om-float 20s linear infinite;
+}
+
+@keyframes om-float {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.om-header-content h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.1rem;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.om-header-content p {
+  font-size: 1rem;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+}
+
+.om-refresh-btn {
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.om-refresh-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
+}
+
+.om-refresh-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Stats */
+.om-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.om-stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.om-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(76, 175, 80, 0.15);
+  border-color: #4CAF50;
+}
+
+.om-stat-icon {
+  width: 58px;
+  height: 58px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.om-stat-icon i {
+  font-size: 1.7rem;
+  color: #4CAF50;
+}
+
+.om-stat-icon.success {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+}
+
+.om-stat-icon.warning {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 235, 59, 0.15));
+}
+
+.om-stat-icon.warning i {
+  color: #FF9800;
+}
+
+.om-stat-icon.revenue {
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(186, 104, 200, 0.15));
+}
+
+.om-stat-icon.revenue i {
+  color: #9C27B0;
+}
+
+.om-stat-content h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.9rem;
+  color: #000;
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.om-stat-content p {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.om-stat-sub {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 400;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Controls */
+.om-controls {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (min-width: 768px) {
+  .om-controls {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.om-search {
+  flex: 1;
+  position: relative;
+}
+
+.om-search input {
+  width: 100%;
+  padding: 14px 20px 14px 45px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.om-search input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.om-search i {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.om-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.om-filter-select {
+  padding: 12px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.om-filter-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* Error */
+.om-error {
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.1), rgba(255, 212, 13, 0.1));
+  border: 2px solid #f3274c;
+  color: #d32f2f;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.om-error i {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.om-error-close {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.om-error-close:hover {
+  background: rgba(243, 39, 76, 0.1);
+}
+
+/* Loading */
+.om-loading {
+  text-align: center;
+  padding: 60px 30px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.om-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(76, 175, 80, 0.1);
+  border-radius: 50%;
+  border-top-color: #4CAF50;
+  animation: om-spin 1s ease-in-out infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes om-spin {
+  to { transform: rotate(360deg); }
+}
+
+.om-loading p {
+  font-size: 1.05rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Empty State */
+.om-empty {
+  text-align: center;
+  padding: 70px 30px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.om-empty-icon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  border: 3px dashed #4CAF50;
+}
+
+.om-empty-icon i {
+  font-size: 2.8rem;
+  color: #4CAF50;
+}
+
+.om-empty h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.7rem;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.om-empty p {
+  color: #666;
+  font-size: 1.05rem;
+  max-width: 380px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+
+.om-empty-action {
+  padding: 12px 26px;
+  border: 2px solid #4CAF50;
+  border-radius: 12px;
+  background: white;
+  color: #4CAF50;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.om-empty-action:hover {
+  background: #4CAF50;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(76, 175, 80, 0.2);
+}
+
+/* Orders List */
+.om-orders-list {
+  margin-top: 5px;
+}
+
+/* Order Card */
+.om-order-card {
+  background: white;
+  border-radius: 18px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(76, 175, 80, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  animation: om-fadeIn 0.5s ease-out forwards;
+}
+
+.om-order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(76, 175, 80, 0.15);
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+/* Order Header */
+.om-order-header {
+  padding: 22px 26px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(139, 195, 74, 0.05));
+  border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.om-order-meta {
+  flex: 1;
+}
+
+.om-order-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.om-id-prefix {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.om-order-id h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  color: #000;
+  margin: 0;
+}
+
+.om-order-date {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.om-order-date i {
+  color: #4CAF50;
+  font-size: 0.9rem;
+}
+
+.om-order-amount {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.om-amount-label {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.om-amount-value {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.om-items-count {
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Customer Section */
+.om-customer-section {
+  padding: 20px 26px;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.om-section-label {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4CAF50;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.om-section-label i {
+  font-size: 1rem;
+}
+
+.om-customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.om-customer-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.om-customer-email {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.om-customer-email i {
+  color: #4CAF50;
+  font-size: 0.9rem;
+}
+
+/* Status Section */
+.om-status-section {
+  padding: 20px 26px;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.om-status-card {
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.om-status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.om-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.om-status-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.om-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.om-status-value {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.om-payment-method {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Order Status Colors */
+.order-status-success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.order-status-preparing {
+  background: rgba(255, 193, 7, 0.1);
+  color: #FF9800;
+  border: 2px solid rgba(255, 193, 7, 0.3);
+}
+
+.order-status-pending {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+  border: 2px solid rgba(33, 150, 243, 0.3);
+}
+
+.order-status-cancelled {
+  background: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+  border: 2px solid rgba(244, 67, 54, 0.3);
+}
+
+.order-status-unknown {
+  background: rgba(158, 158, 158, 0.1);
+  color: #757575;
+  border: 2px solid rgba(158, 158, 158, 0.3);
+}
+
+/* Payment Status Colors */
+.payment-status-success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.payment-status-pending {
+  background: rgba(255, 193, 7, 0.1);
+  color: #FF9800;
+  border: 2px solid rgba(255, 193, 7, 0.3);
+}
+
+.payment-status-failed {
+  background: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+  border: 2px solid rgba(244, 67, 54, 0.3);
+}
+
+.payment-status-unknown {
+  background: rgba(158, 158, 158, 0.1);
+  color: #757575;
+  border: 2px solid rgba(158, 158, 158, 0.3);
+}
+
+/* Items Section */
+.om-items-section {
+  padding: 20px 26px;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.om-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.om-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.om-item:hover {
+  background: white;
+  border-color: rgba(76, 175, 80, 0.2);
+  transform: translateX(4px);
+}
+
+.om-item-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.om-item-details {
+  flex: 1;
+}
+
+.om-item-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.om-item-quantity {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.om-item-price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000;
+  min-width: 70px;
+  text-align: right;
+}
+
+.om-more-items {
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #4CAF50;
+  font-weight: 500;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 10px;
+  border: 2px dashed rgba(76, 175, 80, 0.3);
+}
+
+/* Actions Section */
+.om-actions-section {
+  padding: 20px 26px;
+}
+
+.om-status-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.om-status-btn {
+  padding: 14px 12px;
+  border-radius: 10px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  background: white;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.om-status-btn:hover:not(.om-status-active) {
+  background: rgba(76, 175, 80, 0.05);
+  border-color: rgba(76, 175, 80, 0.3);
+  color: #4CAF50;
+  transform: translateY(-2px);
+}
+
+.om-status-btn.om-status-active {
+  background: #f8f9fa;
+  border-color: #d0d0d0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.om-status-icon {
+  font-size: 1.2rem;
+}
+
+.om-status-text {
+  font-size: 0.85rem;
+}
+
+.om-payment-warning {
+  background: rgba(255, 193, 7, 0.1);
+  border: 2px solid rgba(255, 193, 7, 0.3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #FF9800;
+  font-size: 0.9rem;
+}
+
+.om-payment-warning i {
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .om-container {
+    padding: 20px 15px;
+  }
+  
+  .om-header {
+    padding: 24px 20px;
+    flex-direction: column;
+    gap: 18px;
+    text-align: center;
+  }
+  
+  .om-refresh-btn {
+    position: static;
+    transform: none;
+    align-self: center;
+    margin-top: 10px;
+  }
+  
+  .om-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .om-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .om-search,
+  .om-filter-select {
+    min-width: 100%;
+  }
+  
+  .om-order-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .om-order-amount {
+    text-align: center;
+  }
+  
+  .om-status-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .om-status-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .om-header {
+    padding: 20px;
+  }
+  
+  .om-header-content h2 {
+    font-size: 1.7rem;
+  }
+  
+  .om-stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .om-stat-icon {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .om-stat-icon i {
+    font-size: 1.5rem;
+  }
+  
+  .om-stat-content h3 {
+    font-size: 1.7rem;
+  }
+  
+  .om-status-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom scrollbar */
+.om-items-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.om-items-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.om-items-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 4px;
+}
+
+.om-items-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #3d8b40, #689F38);
+}

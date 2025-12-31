@@ -6,15 +6,16 @@ import MenuManagement from './admin/MenuManagement';
 import UserManagement from './admin/UserManagement';
 import ReviewManagement from './admin/ReviewManagement';
 import BookingManagement from './admin/BookingManagement';
+import '.././components/componentStyles/AdminDashboard.css';
+import PaymentManagement from './admin/PaymentManagement';
 
 
 const AdminDashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<
-    'orders' | 'menu' | 'users' | 'reviews' | 'analytics' | 'bookings'
+    'orders' | 'menu' | 'users' | 'reviews' | 'analytics' | 'bookings' | 'payments' 
   >('orders');
-
 
   const handleLogout = () => {
     logout();
@@ -23,98 +24,312 @@ const AdminDashboard: React.FC = () => {
 
   if (user?.role !== 'admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md">
-            Access denied. Admin privileges required.
+      <div className="admin-access-denied">
+        <div className="access-denied-card">
+          <div className="denied-icon">
+            <i className="fa-solid fa-shield-xmark"></i>
           </div>
+          <h2>Access Denied</h2>
+          <p>Admin privileges required to access this panel.</p>
+          <button
+            onClick={() => navigate('/')}
+            className="denied-home-btn"
+          >
+            <i className="fa-solid fa-home"></i>
+            Return to Home
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Admin Header */}
-      <nav className="bg-green-600 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-white">FoodShop - Admin Panel</h1>
+    <div className="admin-dashboard">
+      {/* Admin Header - Updated to match Layout style */}
+      <header className="admin-header">
+        <div className="admin-header-container">
+          {/* Admin Logo */}
+          <div className="admin-logo">
+            <div className="admin-logo-icon">
+              <i className="fa-solid fa-shield-halved"></i>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-white">
-                Welcome, {user?.firstName} {user?.lastName} (Admin)
-              </span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
-              >
-                Logout
-              </button>
+            <div className="admin-logo-text">
+              <h1>Delicious Bites</h1>
+              <span>ADMIN CONTROL PANEL</span>
             </div>
           </div>
+
+          {/* Admin User Info */}
+          <div className="admin-user-info">
+            <div className="admin-user-avatar">
+              {user?.firstName?.[0] || 'A'}
+            </div>
+            <div className="admin-user-details">
+              <span className="admin-user-name">
+                {user?.firstName} {user?.lastName}
+              </span>
+              <span className="admin-user-role">
+                <i className="fa-solid fa-crown"></i>
+                Administrator
+              </span>
+            </div>
+            <div className="admin-divider"></div>
+            <button
+              onClick={handleLogout}
+              className="admin-logout-btn"
+              title="Logout"
+            >
+              <i className="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
-      </nav>
+      </header>
 
       {/* Admin Main Content */}
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Tab Navigation */}
-          <div className="border-b border-gray-200 mb-6">
-            <nav className="-mb-px flex space-x-8">
-              {[
-                { id: 'orders', name: 'Order Management' },
-                { id: 'menu', name: 'Menu Management' },
-                { id: 'users', name: 'User Management' },
-                { id: 'reviews', name: 'Review Management' },
-                { id: 'bookings', name: 'Booking Management' },
-                { id: 'analytics', name: 'Analytics' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
-                      ? 'border-green-500 text-green-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                >
-                  {tab.name}
-                </button>
+      <main className="admin-main">
+        <div className="admin-container">
+          {/* Admin Welcome Banner */}
+          <div className="admin-welcome-banner">
+            <div className="welcome-content">
+              <h2>
+                <i className="fa-solid fa-gem"></i>
+                Welcome to Admin Dashboard
+              </h2>
+              <p>Manage your restaurant operations efficiently</p>
+            </div>
+            <div className="welcome-stats">
+              <div className="stat-card">
+                <i className="fa-solid fa-chart-line"></i>
+                <span className="stat-label">Total Revenue</span>
+                <span className="stat-value">$12,345</span>
+              </div>
+              <div className="stat-card">
+                <i className="fa-solid fa-receipt"></i>
+                <span className="stat-label">Orders Today</span>
+                <span className="stat-value">24</span>
+              </div>
+              <div className="stat-card">
+                <i className="fa-solid fa-users"></i>
+                <span className="stat-label">Active Users</span>
+                <span className="stat-value">156</span>
+              </div>
+            </div>
+          </div>
 
-              ))}
+          {/* Tab Navigation - Updated Design */}
+          <div className="admin-tabs-container">
+            <nav className="admin-tabs">
+              <button
+                onClick={() => setActiveTab('orders')}
+                className={`admin-tab ${activeTab === 'orders' ? 'active' : ''}`}
+                title="Manage Orders"
+              >
+                <i className="fa-solid fa-box-open"></i>
+                <span>Orders</span>
+                {activeTab === 'orders' && <div className="tab-indicator"></div>}
+              </button>
+              <button
+                onClick={() => setActiveTab('payments')}
+                className={`admin-tab ${activeTab === 'payments' ? 'active' : ''}`}
+                title="Manage Payments"
+              >
+                <i className="fa-solid fa-money-check-dollar"></i> {/* Updated icon */}
+                <span>Payments</span>
+                {activeTab === 'payments' && <div className="tab-indicator"></div>}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('menu')}
+                className={`admin-tab ${activeTab === 'menu' ? 'active' : ''}`}
+                title="Manage Menu Items"
+              >
+                <i className="fa-solid fa-utensils"></i>
+                <span>Menu</span>
+                {activeTab === 'menu' && <div className="tab-indicator"></div>}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('users')}
+                className={`admin-tab ${activeTab === 'users' ? 'active' : ''}`}
+                title="Manage Users"
+              >
+                <i className="fa-solid fa-users-gear"></i>
+                <span>Users</span>
+                {activeTab === 'users' && <div className="tab-indicator"></div>}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('reviews')}
+                className={`admin-tab ${activeTab === 'reviews' ? 'active' : ''}`}
+                title="Manage Reviews"
+              >
+                <i className="fa-solid fa-star"></i>
+                <span>Reviews</span>
+                {activeTab === 'reviews' && <div className="tab-indicator"></div>}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('bookings')}
+                className={`admin-tab ${activeTab === 'bookings' ? 'active' : ''}`}
+                title="Manage Bookings"
+              >
+                <i className="fa-solid fa-calendar-days"></i>
+                <span>Bookings</span>
+                {activeTab === 'bookings' && <div className="tab-indicator"></div>}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('analytics')}
+                className={`admin-tab ${activeTab === 'analytics' ? 'active' : ''}`}
+                title="View Analytics"
+              >
+                <i className="fa-solid fa-chart-pie"></i>
+                <span>Analytics</span>
+                {activeTab === 'analytics' && <div className="tab-indicator"></div>}
+              </button>
             </nav>
           </div>
 
           {/* Tab Content */}
-          <div className="mt-6">
-            {activeTab === 'orders' && <OrderManagement />}
-            {activeTab === 'menu' && <MenuManagement />}
-            {activeTab === 'users' && <UserManagement />}
-            {activeTab === 'reviews' && <ReviewManagement />}
-            {activeTab === 'bookings' && <BookingManagement />}
+          <div className="admin-content">
+            {activeTab === 'orders' && (
+              <div className="tab-content">
+                <OrderManagement />
+              </div>
+            )}
+            {activeTab === 'payments' && ( // Add this section
+              <div className="tab-content">
+                <PaymentManagement />
+              </div>
+            )}
+            {activeTab === 'menu' && (
+              <div className="tab-content">
+                <MenuManagement />
+              </div>
+            )}
+            {activeTab === 'users' && (
+              <div className="tab-content">
+                <UserManagement />
+              </div>
+            )}
+            {activeTab === 'reviews' && (
+              <div className="tab-content">
+                <ReviewManagement />
+              </div>
+            )}
+            {activeTab === 'bookings' && (
+              <div className="tab-content">
+                <BookingManagement />
+              </div>
+            )}
             {activeTab === 'analytics' && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Analytics</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-blue-50 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-blue-900">Total Revenue</h3>
-                    <p className="text-2xl font-bold text-blue-600">$12,345</p>
-                  </div>
-                  <div className="bg-green-50 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-green-900">Orders Today</h3>
-                    <p className="text-2xl font-bold text-green-600">24</p>
-                  </div>
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-purple-900">Menu Items</h3>
-                    <p className="text-2xl font-bold text-purple-600">45</p>
+              <div className="tab-content">
+                <div className="analytics-dashboard">
+                  <h3 className="analytics-title">
+                    <i className="fa-solid fa-chart-simple"></i>
+                    Analytics Dashboard
+                  </h3>
+                  <div className="analytics-grid">
+                    <div className="analytic-card revenue">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-money-bill-trend-up"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Total Revenue</span>
+                        <span className="analytic-value">$12,345</span>
+                        <span className="analytic-trend positive">
+                          <i className="fa-solid fa-arrow-up"></i>
+                          12.5%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="analytic-card orders">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-receipt"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Orders Today</span>
+                        <span className="analytic-value">24</span>
+                        <span className="analytic-trend positive">
+                          <i className="fa-solid fa-arrow-up"></i>
+                          8.3%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="analytic-card menu">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-utensils"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Menu Items</span>
+                        <span className="analytic-value">45</span>
+                        <span className="analytic-trend neutral">
+                          <i className="fa-solid fa-minus"></i>
+                          0%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="analytic-card users">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-users"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Active Users</span>
+                        <span className="analytic-value">156</span>
+                        <span className="analytic-trend positive">
+                          <i className="fa-solid fa-arrow-up"></i>
+                          5.2%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="analytic-card reviews">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-star"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Avg. Rating</span>
+                        <span className="analytic-value">4.7</span>
+                        <span className="analytic-trend positive">
+                          <i className="fa-solid fa-arrow-up"></i>
+                          0.3%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="analytic-card bookings">
+                      <div className="analytic-icon">
+                        <i className="fa-solid fa-calendar-check"></i>
+                      </div>
+                      <div className="analytic-content">
+                        <span className="analytic-label">Today's Bookings</span>
+                        <span className="analytic-value">18</span>
+                        <span className="analytic-trend negative">
+                          <i className="fa-solid fa-arrow-down"></i>
+                          2.1%
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Quick Actions FAB */}
+      <button
+        onClick={() => navigate('/')}
+        className="admin-fab"
+        title="Go to Main Site"
+      >
+        <i className="fa-solid fa-house"></i>
+      </button>
     </div>
   );
 };

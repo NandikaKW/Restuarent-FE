@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { api } from '../services/api';
 import { useAuth } from './AuthContext';
-
+//what a booking coming from the backend looks like.
 interface Booking {
   _id: string;
   userId?: string;
@@ -15,7 +15,7 @@ interface Booking {
   message?: string;
   createdAt: string;
 }
-
+//data sent FROM the form TO the backend.
 interface BookingFormData {
   name: string;
   email: string;
@@ -26,6 +26,7 @@ interface BookingFormData {
   message: string;
 }
 
+//what bookingContext provides
 interface BookingContextType {
   bookings: Booking[];
   loading: boolean;
@@ -46,7 +47,7 @@ export const useBooking = () => {
   }
   return context;
 };
-
+//BookingProvider can wrap other components, and whatever is inside will be rendered as children.
 interface BookingProviderProps {
   children: ReactNode;
 }
@@ -159,6 +160,7 @@ export const BookingProvider: React.FC<BookingProviderProps> = ({ children }) =>
   };
 
   return (
+    //shares the value object with all components inside it (the children).
     <BookingContext.Provider value={value}>
       {children}
     </BookingContext.Provider>
