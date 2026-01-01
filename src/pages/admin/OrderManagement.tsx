@@ -78,7 +78,7 @@ const OrderManagement: React.FC = () => {
 
   // Enhanced user info extraction
   const getUserInfo = (order: Order) => {
-    
+    // Case 1: userId is a populated user object
     if (order.userId && typeof order.userId === 'object') {
       const user = order.userId as OrderUser;
       return {
@@ -88,7 +88,7 @@ const OrderManagement: React.FC = () => {
       };
     }
     
-    
+    // Case 2: userId is just a string ID (not populated)
     if (typeof order.userId === 'string') {
       return {
         firstName: 'User ID:',
@@ -97,7 +97,7 @@ const OrderManagement: React.FC = () => {
       };
     }
     
-    
+    // Case 3: No user information available
     return {
       firstName: 'Unknown',
       lastName: 'User',
@@ -107,7 +107,7 @@ const OrderManagement: React.FC = () => {
 
   // Get payment info
   const getPaymentInfo = (order: Order) => {
-    
+    // Case 1: paymentId is a populated payment object
     if (order.paymentId && typeof order.paymentId === 'object') {
       const payment = order.paymentId as PaymentInfo;
       return {
@@ -119,7 +119,7 @@ const OrderManagement: React.FC = () => {
       };
     }
     
-    
+    // Case 2: paymentId is just a string ID (not populated)
     if (typeof order.paymentId === 'string') {
       return {
         status: 'pending',
@@ -130,7 +130,7 @@ const OrderManagement: React.FC = () => {
       };
     }
     
-    
+    // Case 3: No payment information available
     return {
       status: 'not_found',
       method: 'Not available',
@@ -195,7 +195,7 @@ const OrderManagement: React.FC = () => {
     );
   }
 
-  
+  // Calculate summary statistics
   const paymentSummary = {
     total: orders.length,
     paid: orders.filter(order => {

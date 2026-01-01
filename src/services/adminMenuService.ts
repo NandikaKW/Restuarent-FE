@@ -5,7 +5,8 @@ export type MenuItem = {
   title: string;
   description?: string;
   price: number;
-  imageURL: string; // MUST match backend
+  imageURL: string; 
+  category: string; // Add this line
 };
 
 export const adminMenuService = {
