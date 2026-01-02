@@ -5,18 +5,16 @@ import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { startLoading, stopLoading, setMessage, clearMessage } from '../store/uiSlice';
 import type { RootState } from '../store';
-
+import '../components/componentStyles/Booking.css';
 
 const Booking: React.FC = () => {
   const { user } = useAuth();
   const { bookings, loading, error, createBooking, fetchUserBookings, cancelBooking } = useBooking();
   const [showForm, setShowForm] = useState(false);
-  const [localLoading, setLocalLoading] = useState(false);
   const dispatch = useDispatch();
   const uiLoading = useSelector((state: RootState) => state.ui.loading);
   const uiMessage = useSelector((state: RootState) => state.ui.message);
 
-  // Form state
   const [formData, setFormData] = useState({
     name: user ? `${user.firstName} ${user.lastName}` : '',
     email: user?.email || '',
@@ -27,13 +25,11 @@ const Booking: React.FC = () => {
     message: '',
   });
 
-  
   useEffect(() => {
-    
     if (user) {
       fetchUserBookings();
     }
-  }, [user]); 
+  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -45,15 +41,17 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
+    dispatch(clearMessage());
     dispatch(startLoading());
 
-    await new Promise(res => setTimeout(res, 800)); 
+    await new Promise(res => setTimeout(res, 800));
+    
     const result = await createBooking(formData);
-
+    
     if (result.success) {
-      dispatch(setMessage('Booking created successfully'));
-
+      dispatch(setMessage('Booking created successfully! 🎉'));
+      
       setFormData({
         name: user ? `${user.firstName} ${user.lastName}` : '',
         email: user?.email || '',
@@ -63,27 +61,36 @@ const Booking: React.FC = () => {
         guests: 2,
         message: '',
       });
-
+      
       setTimeout(() => {
         setShowForm(false);
       }, 1000);
-
+      
     } else {
-      dispatch(setMessage(result.message));
+      dispatch(setMessage(result.message || 'Failed to create booking. Please try again.'));
     }
-
+    
     dispatch(stopLoading());
-
-    // Auto-clear message after 3 seconds (nice touch)
+    
     setTimeout(() => {
       dispatch(clearMessage());
-    }, 3000);
+    }, 4000);
   };
-
 
   const handleCancelBooking = async (id: string) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
+      dispatch(startLoading());
+      dispatch(setMessage('Cancelling booking...'));
+      
       await cancelBooking(id);
+      
+      dispatch(setMessage('Booking cancelled successfully'));
+      
+      dispatch(stopLoading());
+      
+      setTimeout(() => {
+        dispatch(clearMessage());
+      }, 3000);
     }
   };
 
@@ -93,271 +100,374 @@ const Booking: React.FC = () => {
     }
   };
 
-  // Generate time slots
   const timeSlots = [
     '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
     '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00'
   ];
 
+  const getMessageType = (message: string): 'success' | 'error' | 'info' => {
+    if (message.includes('successfully')) return 'success';
+    if (message.includes('Error') || message.includes('Failed')) return 'error';
+    return 'info';
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Table Bookings</h1>
-          <p className="text-gray-600 mt-2">Reserve your table for a great dining experience</p>
-        </div>
-
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
-          >
-            {showForm ? 'Hide Booking Form' : 'Book a Table'}
-          </button>
-        </div>
-
-        {/* Booking Form */}
-        {uiMessage && (
-          <div className="mb-4 text-center bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
-            {uiMessage}
+    <div className="booking-container">
+      {/* Hero Section */}
+      <section className="booking-hero">
+        <div className="booking-hero-content">
+          <div className="booking-hero-text">
+            <h1>Table Reservations</h1>
+            <p>Secure your spot for an unforgettable dining experience</p>
           </div>
-        )}
-        {showForm && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8 max-w-2xl mx-auto">
-            {/* {uiMessage && (
-              <div className="mb-4 text-center bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+        </div>
+      </section>
+
+      <div className="booking-wrapper">
+        <main className="booking-main">
+          {/* Redux Notification */}
+          {uiMessage && (
+            <div className={`booking-notification booking-notification-${getMessageType(uiMessage)}`}>
+              <div className="booking-notification-content">
+                <span className="booking-notification-icon">
+                  {getMessageType(uiMessage) === 'success' ? '✓' : getMessageType(uiMessage) === 'error' ? '✗' : 'ⓘ'}
+                </span>
                 {uiMessage}
               </div>
-            )} */}
-
-
-            {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholder="+1 (123) 456-7890"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Number of Guests *
-                  </label>
-                  <select
-                    name="guests"
-                    value={formData.guests}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                      <option key={num} value={num}>
-                        {num} {num === 1 ? 'Guest' : 'Guests'}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date *
-                  </label>
-                  <input
-                    type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    required
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Time *
-                  </label>
-                  <select
-                    name="time"
-                    value={formData.time}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="">Select a time</option>
-                    {timeSlots.map(time => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Special Requests (Optional)
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Any special requirements or requests..."
-                />
-              </div>
-
-              <div className="text-center">
-                <button
-                  type="submit"
-                  disabled={loading || uiLoading}
-                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 disabled:opacity-50"
-                >
-                  {uiLoading ? 'Processing...' : 'Confirm Reservation'}
-                </button>
-
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* My Bookings */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-6">My Bookings</h2>
-
-          {!user ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600 mb-4">Please log in to view your bookings.</p>
-            </div>
-          ) : localLoading ? (
-            <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600"></div>
-              <p className="mt-2 text-gray-600">Loading your bookings...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-8">
-              <p className="text-red-600 mb-4">Error loading bookings: {error}</p>
-              <button
-                onClick={handleRetry}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+              <button 
+                onClick={() => dispatch(clearMessage())}
+                className="booking-notification-close"
               >
-                Retry
+                ×
               </button>
             </div>
-          ) : bookings.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              You have no upcoming bookings. Make a reservation above!
+          )}
+
+          {/* Header */}
+          <div className="booking-header">
+            <div className="booking-heading-two">
+              <h2>Manage Your Bookings</h2>
+              <div className="booking-line"></div>
             </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Guests
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Contact
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {bookings.map((booking) => (
-                    <tr key={booking._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {format(new Date(booking.date), 'MMM dd, yyyy')}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {booking.time}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          {booking.guests} {booking.guests === 1 ? 'Guest' : 'Guests'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{booking.email}</div>
-                        <div className="text-sm text-gray-500">{booking.phone}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Confirmed
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleCancelBooking(booking._id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="booking-stats-summary">
+              <div className="booking-stat-item">
+                <i className="fa-solid fa-calendar-check"></i>
+                <div>
+                  <h3>{bookings.length}</h3>
+                  <p>Active Bookings</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowForm(!showForm)}
+                className="booking-new-btn"
+              >
+                <i className="fa-solid fa-plus"></i>
+                {showForm ? 'Hide Form' : 'New Booking'}
+              </button>
+            </div>
+          </div>
+
+          {/* Booking Form */}
+          {showForm && (
+            <div className="booking-form-section">
+              <div className="booking-form-container">
+                <div className="booking-form-header">
+                  <i className="fa-solid fa-calendar-plus"></i>
+                  <h3>Make a Reservation</h3>
+                </div>
+                
+                {error && (
+                  <div className="booking-error">
+                    <i className="fas fa-exclamation-circle"></i>
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="booking-form">
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Full Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                        placeholder="+1 (123) 456-7890"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Number of Guests</label>
+                      <select
+                        name="guests"
+                        value={formData.guests}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                          <option key={num} value={num}>
+                            {num} {num === 1 ? 'Guest' : 'Guests'}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Date</label>
+                      <input
+                        type="date"
+                        name="date"
+                        value={formData.date}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                        min={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Time</label>
+                      <select
+                        name="time"
+                        value={formData.time}
+                        onChange={handleInputChange}
+                        required
+                        disabled={uiLoading}
+                      >
+                        <option value="">Select a time</option>
+                        {timeSlots.map(time => (
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>Special Requests (Optional)</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Any special requirements or requests..."
+                      disabled={uiLoading}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || uiLoading}
+                    className="booking-submit-btn"
+                  >
+                    {uiLoading ? (
+                      <>
+                        <span className="booking-loading-spinner-btn"></span>
+                        Processing...
+                      </>
+                    ) : loading ? 'Booking...' : 'Confirm Reservation'}
+                  </button>
+                </form>
+              </div>
             </div>
           )}
-        </div>
+
+          {/* My Bookings Section */}
+          <div className="bookings-section">
+            {!user ? (
+              <div className="booking-login-prompt">
+                <div className="booking-login-icon">
+                  <i className="fa-solid fa-user-circle"></i>
+                </div>
+                <h3 className="booking-login-title">Sign In Required</h3>
+                <p className="booking-login-text">Please log in to view and manage your bookings</p>
+              </div>
+            ) : loading ? (
+              <div className="booking-loading">
+                <div className="booking-loading-spinner">
+                  <i className="fa-solid fa-utensils fa-spin"></i>
+                </div>
+                <p className="booking-loading-text">Loading your bookings...</p>
+              </div>
+            ) : error ? (
+              <div className="booking-error-state">
+                <div className="booking-error-icon">
+                  <i className="fa-solid fa-exclamation-triangle"></i>
+                </div>
+                <h3 className="booking-error-title">Something Went Wrong</h3>
+                <p className="booking-error-message">{error}</p>
+                <button
+                  onClick={handleRetry}
+                  className="booking-retry-btn"
+                >
+                  <i className="fa-solid fa-rotate-right"></i>
+                  Try Again
+                </button>
+              </div>
+            ) : bookings.length === 0 ? (
+              <div className="booking-empty-state">
+                <div className="booking-empty-icon">
+                  <i className="fa-solid fa-calendar-alt"></i>
+                </div>
+                <h3 className="booking-empty-title">No Upcoming Bookings</h3>
+                <p className="booking-empty-text">
+                  You have no upcoming reservations. Book a table to enjoy our culinary experience!
+                </p>
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="booking-empty-btn"
+                >
+                  <i className="fa-solid fa-plus"></i>
+                  Make Your First Booking
+                </button>
+              </div>
+            ) : (
+              <div className="bookings-grid">
+                {bookings.map((booking) => (
+                  <div key={booking._id} className="booking-card">
+                    {/* Booking Header */}
+                    <div className="booking-card-header">
+                      <div className="booking-id-section">
+                        <div className="booking-id-badge">
+                          <i className="fa-solid fa-hashtag"></i>
+                          Reservation #{booking._id?.slice(-6)}
+                        </div>
+                        <div className="booking-date">
+                          <i className="fa-solid fa-calendar-days"></i>
+                          {format(new Date(booking.date), 'MMM dd, yyyy')}
+                        </div>
+                      </div>
+                      
+                      <div className="booking-status-section">
+                        <div className="booking-guests">
+                          <i className="fa-solid fa-user-friends"></i>
+                          {booking.guests} {booking.guests === 1 ? 'Guest' : 'Guests'}
+                        </div>
+                        <div className="booking-status-badge booking-status-confirmed">
+                          <i className="fa-solid fa-check-circle"></i>
+                          Confirmed
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Booking Details */}
+                    <div className="booking-details-section">
+                      <div className="booking-time-info">
+                        <div className="booking-time-item">
+                          <i className="fa-solid fa-clock"></i>
+                          <div>
+                            <span className="time-label">Reservation Time</span>
+                            <span className="time-value">{booking.time}</span>
+                          </div>
+                        </div>
+                        <div className="booking-contact-info">
+                          <div className="contact-email">
+                            <i className="fa-solid fa-envelope"></i>
+                            {booking.email}
+                          </div>
+                          <div className="contact-phone">
+                            <i className="fa-solid fa-phone"></i>
+                            {booking.phone}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Special Requests */}
+                    {booking.message && (
+                      <div className="booking-requests-section">
+                        <div className="requests-header">
+                          <i className="fa-solid fa-comment-dots"></i>
+                          <h4>Special Requests</h4>
+                        </div>
+                        <p className="requests-text">{booking.message}</p>
+                      </div>
+                    )}
+
+                    {/* Booking Footer */}
+                    <div className="booking-card-footer">
+                      <button
+                        onClick={() => handleCancelBooking(booking._id)}
+                        disabled={uiLoading}
+                        className="booking-cancel-btn"
+                      >
+                        <i className="fa-solid fa-times"></i> Cancel Reservation
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Restaurant Information */}
+          <div className="booking-info-section">
+            <div className="booking-info-header">
+              <i className="fa-solid fa-circle-info"></i>
+              <h3>Restaurant Information</h3>
+            </div>
+            <div className="booking-info-grid">
+              <div className="booking-info-card">
+                <div className="info-icon">
+                  <i className="fa-solid fa-clock"></i>
+                </div>
+                <div className="info-content">
+                  <h4>Operating Hours</h4>
+                  <p>Tuesday - Saturday: 12:00 PM - 11:00 PM</p>
+                  <p>Sunday: Closed</p>
+                  <p>Monday: Special Events Only</p>
+                </div>
+              </div>
+              <div className="booking-info-card">
+                <div className="info-icon">
+                  <i className="fa-solid fa-utensils"></i>
+                </div>
+                <div className="info-content">
+                  <h4>Dining Tips</h4>
+                  <p>• Arrive 10 minutes before your reservation</p>
+                  <p>• Special requests are accommodated when possible</p>
+                  <p>• 24-hour cancellation policy applies</p>
+                </div>
+              </div>
+              <div className="booking-info-card">
+                <div className="info-icon">
+                  <i className="fa-solid fa-headset"></i>
+                </div>
+                <div className="info-content">
+                  <h4>Need Assistance?</h4>
+                  <p>Contact our reservation team for any booking-related questions or special arrangements.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );

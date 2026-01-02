@@ -4,6 +4,7 @@ import { useOrder } from '../contexts/OrderContext';
 import { useState, useEffect } from 'react';
 import CartItem from '../components/CartItem';
 import PaymentPopup from '../components/PaymentPopup';
+import '../components/componentStyles/Cart.css';
 
 const Cart: React.FC = () => {
   const { cart, loading: cartLoading, clearCart, refreshCart, error: cartError, clearError } = useCart();
@@ -28,46 +29,48 @@ const Cart: React.FC = () => {
     try {
       const order = await placeOrder();
       setPlacedOrder(order);
-      setShowPaymentPopup(true); // Show payment popup
+      setShowPaymentPopup(true);
     } catch (error) {
       console.error('Checkout failed:', error);
     }
   };
 
-  // Safe function to get order display ID
   const getOrderDisplayId = (order: any) => {
     const orderId = order?._id || order?.id;
     return orderId ? `#${orderId.slice(-6)}` : '#------';
   };
 
-  // Handle payment success
   const handlePaymentSuccess = (paymentId: string) => {
     setShowPaymentPopup(false);
     setCheckoutSuccess(true);
-    refreshCart(); // Clear cart after successful payment
+    refreshCart();
   };
 
   // Show error message if any
   if (error && !checkoutSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-            <button 
-              onClick={clearError}
-              className="float-right text-red-900 font-bold"
-            >
-              ×
-            </button>
-          </div>
-          <div className="text-center">
-            <Link
-              to="/menu"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
-            >
-              Back to Menu
-            </Link>
+      <div className="cart-restaurant-container">
+        <div className="cart-container-wrapper">
+          <div className="cart-error-message">
+            <div className="error-content">
+              <i className="fa-solid fa-exclamation-triangle"></i>
+              <h3>Oops! Something went wrong</h3>
+              <p>{error}</p>
+              <button 
+                onClick={clearError}
+                className="cart-button"
+              >
+                <i className="fa-solid fa-xmark me-2"></i>
+                Dismiss
+              </button>
+              <Link
+                to="/menu"
+                className="cart-button cart-button-outline"
+              >
+                <i className="fa-solid fa-arrow-left me-2"></i>
+                Back to Menu
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -85,53 +88,61 @@ const Cart: React.FC = () => {
           onSuccess={handlePaymentSuccess}
         />
         {/* Blurred background */}
-        <div className="min-h-screen bg-gray-50 py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 blur-sm">
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-              <button
-                onClick={clearCart}
-                disabled={loading}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 transition duration-200"
-              >
-                Clear Cart
-              </button>
+        <div className="cart-restaurant-container blurred">
+          <div className="cart-container-wrapper">
+            <div className="cart-hero-section">
+              <div className="hero-content">
+                <div className="hero-text">
+                  <h1>Complete Payment</h1>
+                  <p>Secure payment processing for your order</p>
+                </div>
+              </div>
             </div>
+            
+            <section className="cart-gap">
+              <div className="cart-container-wrapper">
+                <div className="cart-main-container">
+                  <div className="cart-header">
+                    <div className="cart-heading-two">
+                      <h2>Order #{getOrderDisplayId(placedOrder)}</h2>
+                      <div className="cart-line"></div>
+                    </div>
+                  </div>
 
-            <div className="space-y-4 mb-8">
-              {/* Loops through each item in the cart and creates a component for it. */}
-              {cart?.items.map((item) => (
-                <CartItem key={item.menuItemId} item={item} />
-              ))}
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xl font-semibold text-gray-900">Total Items:</span>
-                <span className="text-xl font-bold text-gray-900">{cart?.totalItems}</span>
+                  <div className="order-summary-blurred">
+                    <div className="summary-header">
+                      <i className="fa-solid fa-credit-card"></i>
+                      <div>
+                        <h3>Payment Processing</h3>
+                        <p className="summary-subtitle">Complete payment to confirm your order</p>
+                      </div>
+                    </div>
+                    
+                    <div className="summary-details">
+                      <div className="summary-row">
+                        <span className="summary-label">Order Amount:</span>
+                        <span className="summary-value">
+                          ${placedOrder.totalPrice?.toFixed(2) || '0.00'}
+                        </span>
+                      </div>
+                      <div className="summary-row">
+                        <span className="summary-label">Status:</span>
+                        <span className="summary-value status-pending">
+                          <i className="fa-solid fa-clock me-2"></i>
+                          Awaiting Payment
+                        </span>
+                      </div>
+                      <div className="summary-row total">
+                        <span className="summary-label">Total Due:</span>
+                        <span className="summary-value total-price">
+                          ${placedOrder.totalPrice?.toFixed(2) || '0.00'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-2xl font-bold text-gray-900">Total Price:</span>
-                <span className="text-2xl font-bold text-blue-600">
-                  ${cart?.totalPrice.toFixed(2)}
-                </span>
-              </div>
-              <div className="mt-6 flex space-x-4">
-                <Link
-                  to="/menu"
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200"
-                >
-                  Continue Shopping
-                </Link>
-                <button 
-                  onClick={handleCheckout}
-                  disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium disabled:opacity-50 transition duration-200"
-                >
-                  {loading ? 'Placing Order...' : 'Place Order'}
-                </button>
-              </div>
-            </div>
+            </section>
           </div>
         </div>
       </>
@@ -141,34 +152,60 @@ const Cart: React.FC = () => {
   // Success message after payment
   if (checkoutSuccess && placedOrder) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-            <p className="text-gray-600 mb-4">
-              Thank you for your order. Your order number is <strong>{getOrderDisplayId(placedOrder)}</strong>
-            </p>
-            <p className="text-gray-600 mb-6">
-              Total Paid: <strong>${placedOrder.totalPrice?.toFixed(2) || '0.00'}</strong>
-            </p>
-            <div className="flex space-x-4 justify-center">
-              <Link
-                to="/orders"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
-              >
-                View Order History
-              </Link>
-              <Link
-                to="/menu"
-                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-md font-medium transition duration-200"
-              >
-                Continue Shopping
-              </Link>
+      <div className="cart-restaurant-container">
+        <div className="cart-container-wrapper">
+          <div className="cart-success-message">
+            <div className="success-content">
+              <div className="success-icon">
+                <i className="fa-solid fa-check"></i>
+              </div>
+              <h2>Order Placed Successfully!</h2>
+              <p className="success-subtitle">
+                Thank you for your order. Your delicious meal is being prepared!
+              </p>
+              
+              <div className="order-details-card">
+                <div className="order-header">
+                  <i className="fa-solid fa-receipt"></i>
+                  <h4>Order Details</h4>
+                </div>
+                <div className="order-info">
+                  <div className="info-row">
+                    <span className="info-label">Order Number:</span>
+                    <span className="info-value">{getOrderDisplayId(placedOrder)}</span>
+                  </div>
+                  <div className="info-row">
+                    <span className="info-label">Total Amount:</span>
+                    <span className="info-value total-price">
+                      ${placedOrder.totalPrice?.toFixed(2) || '0.00'}
+                    </span>
+                  </div>
+                  <div className="info-row">
+                    <span className="info-label">Status:</span>
+                    <span className="info-value status-success">
+                      <i className="fa-solid fa-check-circle me-2"></i>
+                      Confirmed
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="success-actions">
+                <Link
+                  to="/orders"
+                  className="cart-button"
+                >
+                  <i className="fa-solid fa-history me-2"></i>
+                  View Order History
+                </Link>
+                <Link
+                  to="/menu"
+                  className="cart-button cart-button-outline"
+                >
+                  <i className="fa-solid fa-utensils me-2"></i>
+                  Continue Shopping
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -179,89 +216,269 @@ const Cart: React.FC = () => {
   // Original cart empty state
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <svg
-              className="mx-auto h-24 w-24 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            <h2 className="mt-4 text-2xl font-bold text-gray-900">Your cart is empty</h2>
-            <p className="mt-2 text-gray-600">Start adding some delicious food to your cart!</p>
-            <Link
-              to="/menu"
-              className="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
-            >
-              Browse Menu
-            </Link>
+      <div className="cart-restaurant-container">
+        {/* Hero Section - Matching Dashboard */}
+        <section className="cart-hero-section">
+          <div className="cart-container-wrapper">
+            <div className="hero-content">
+              <div className="hero-text">
+                <h1>Your Shopping Cart</h1>
+                <p>Add delicious items to start your order</p>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section className="cart-gap">
+          <div className="cart-container-wrapper">
+            <div className="cart-empty-state">
+              <div className="empty-content">
+                <div className="empty-icon">
+                  <i className="fa-solid fa-shopping-basket"></i>
+                </div>
+                <h2>Your Cart is Empty</h2>
+                <p className="empty-subtitle">
+                  Looks like you haven't added any delicious items to your cart yet.
+                </p>
+                <div className="empty-actions">
+                  <Link
+                    to="/menu"
+                    className="cart-button"
+                  >
+                    <i className="fa-solid fa-plus me-2"></i>
+                    Browse Our Menu
+                  </Link>
+                </div>
+                
+                <div className="featured-items">
+                  <h4><i className="fa-solid fa-fire me-2"></i>Popular This Week</h4>
+                  <div className="items-grid">
+                    <div className="featured-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                        alt="Gourmet Burger"
+                      />
+                      <div className="item-info">
+                        <h5>Gourmet Burger</h5>
+                        <p className="price">$24.99</p>
+                        <ul className="cart-star">
+                          {[...Array(5)].map((_, i) => (
+                            <li key={i}><i className="fa-solid fa-star"></i></li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="featured-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                        alt="Truffle Pizza"
+                      />
+                      <div className="item-info">
+                        <h5>Truffle Pizza</h5>
+                        <p className="price">$29.99</p>
+                        <ul className="cart-star">
+                          {[...Array(5)].map((_, i) => (
+                            <li key={i}><i className="fa-solid fa-star"></i></li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="featured-item">
+                      <img
+                        src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                        alt="Pasta Carbonara"
+                      />
+                      <div className="item-info">
+                        <h5>Pasta Carbonara</h5>
+                        <p className="price">$22.99</p>
+                        <ul className="cart-star">
+                          {[...Array(5)].map((_, i) => (
+                            <li key={i}><i className="fa-solid fa-star"></i></li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
 
   // Original cart with items
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-          <button
-            onClick={clearCart}
-            disabled={loading}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 transition duration-200"
-          >
-            Clear Cart
-          </button>
+    <div className="cart-restaurant-container">
+      {/* Hero Section - Matching Dashboard */}
+      <section className="cart-hero-section">
+        <div className="cart-container-wrapper">
+          <div className="hero-content">
+            <div className="hero-text">
+              <h1>Your Shopping Cart</h1>
+              <p>Review your selected items and proceed to checkout</p>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="space-y-4 mb-8">
-          {cart.items.map((item) => (
-            <CartItem key={item.menuItemId} item={item} />
-          ))}
-        </div>
+      <section className="cart-gap">
+        <div className="cart-container-wrapper">
+          <div className="cart-main-container">
+            {/* Cart Header */}
+            <div className="cart-header">
+              <div className="cart-heading-two">
+                <h2>Cart Items</h2>
+                <div className="cart-line"></div>
+              </div>
+              <button
+                onClick={clearCart}
+                disabled={loading}
+                className="cart-button cart-button-clear"
+              >
+                <i className="fa-solid fa-trash-can me-2"></i>
+                Clear Cart
+              </button>
+            </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-xl font-semibold text-gray-900">Total Items:</span>
-            <span className="text-xl font-bold text-gray-900">{cart.totalItems}</span>
+            {/* Cart Items */}
+            <div className="cart-items-container">
+              {cart.items.map((item) => (
+                <CartItem key={item.menuItemId} item={item} />
+              ))}
+            </div>
+
+            {/* Order Summary */}
+            <div className="order-summary">
+              <div className="summary-header">
+                <i className="fa-solid fa-file-invoice-dollar"></i>
+                <h3>Order Summary</h3>
+              </div>
+              
+              <div className="summary-details">
+                <div className="summary-row">
+                  <span className="summary-label">Subtotal</span>
+                  <span className="summary-value">
+                    ${cart.totalPrice.toFixed(2)}
+                  </span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Delivery Fee</span>
+                  <span className="summary-value">$0.00</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Tax</span>
+                  <span className="summary-value">
+                    ${(cart.totalPrice * 0.1).toFixed(2)}
+                  </span>
+                </div>
+                <div className="summary-row discount">
+                  <span className="summary-label">
+                    <i className="fa-solid fa-tag me-2"></i>
+                    Discount
+                  </span>
+                  <span className="summary-value">-$5.00</span>
+                </div>
+                <div className="summary-row total">
+                  <span className="summary-label">Total</span>
+                  <span className="summary-value total-price">
+                    ${(cart.totalPrice * 1.1 - 5).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Cart Stats */}
+              <div className="cart-stats">
+                <div className="stat-card">
+                  <i className="fa-solid fa-box"></i>
+                  <h3>{cart.totalItems}</h3>
+                  <p>Total Items</p>
+                </div>
+              </div>
+
+              {/* Checkout Actions */}
+              <div className="checkout-actions">
+                <Link
+                  to="/menu"
+                  className="cart-button cart-button-outline"
+                >
+                  <i className="fa-solid fa-plus me-2"></i>
+                  Continue Shopping
+                </Link>
+                <button 
+                  onClick={handleCheckout}
+                  disabled={loading}
+                  className="cart-button checkout-btn"
+                >
+                  {loading ? (
+                    <>
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa-solid fa-lock me-2"></i>
+                      Proceed to Payment
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Payment Methods */}
+              <div className="payment-methods">
+                <p>We Accept:</p>
+                <div className="payment-icons">
+                  <i className="fa-brands fa-cc-visa"></i>
+                  <i className="fa-brands fa-cc-mastercard"></i>
+                  <i className="fa-brands fa-cc-amex"></i>
+                  <i className="fa-brands fa-cc-paypal"></i>
+                  <i className="fa-brands fa-cc-apple-pay"></i>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-between items-center mb-6">
-            <span className="text-2xl font-bold text-gray-900">Total Price:</span>
-            <span className="text-2xl font-bold text-blue-600">
-              ${cart.totalPrice.toFixed(2)}
-            </span>
-          </div>
-          <div className="mt-6 flex space-x-4">
-            <Link
-              to="/menu"
-              className="flex-1 bg-gray-600 hover:bg-gray-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200"
-            >
-              Continue Shopping
-            </Link>
-            <button 
-              onClick={handleCheckout}
-              disabled={loading}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium disabled:opacity-50 transition duration-200"
-            >
-              {loading ? 'Processing...' : 'Proceed to Payment'}
-            </button>
-          </div>
-          <p className="text-sm text-gray-500 mt-4 text-center">
-            You'll be redirected to secure payment after clicking "Proceed to Payment"
-          </p>
         </div>
-      </div>
+      </section>
+
+      {/* Special Offers */}
+      <section className="special-offers cart-gap cart-no-top">
+        <div className="cart-container-wrapper">
+          <h4 className="offers-title">
+            <i className="fa-solid fa-gift me-2"></i>
+            Special Offers for You
+          </h4>
+          <div className="offers-grid">
+            <div className="offer-card">
+              <div className="offer-icon">
+                <i className="fa-solid fa-percent"></i>
+              </div>
+              <div className="offer-content">
+                <h5>First Order Discount</h5>
+                <p>Get 15% off on your first order</p>
+              </div>
+            </div>
+            <div className="offer-card">
+              <div className="offer-icon">
+                <i className="fa-solid fa-utensils"></i>
+              </div>
+              <div className="offer-content">
+                <h5>Free Appetizer</h5>
+                <p>On orders above $40</p>
+              </div>
+            </div>
+            <div className="offer-card">
+              <div className="offer-icon">
+                <i className="fa-solid fa-star"></i>
+              </div>
+              <div className="offer-content">
+                <h5>Loyalty Points</h5>
+                <p>Earn points on every order</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

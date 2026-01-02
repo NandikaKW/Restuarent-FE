@@ -197,6 +197,7 @@
 
 /* CartIcon Container - For integrated CartIcon component */
 .cart-icon-container {
+  margin-right: 12px;
   position: relative;
   display: flex;
   align-items: center;

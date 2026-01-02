@@ -1,417 +1,592 @@
-/* OrderHistory.css - Restaurant Themed Version */
+/* src/components/componentStyles/OrderHistory.css */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
-/* ========== ORDER MAIN CONTAINER ========== */
-.order-container {
+/* ========== ORDER HISTORY CONTAINER ========== */
+.order-history-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff9f0 0%, #fff5e6 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f5f7fa 100%);
   font-family: 'Epilogue', sans-serif;
-  padding: 0;
   position: relative;
 }
 
-/* Hero Section - Restaurant Theme */
-.order-hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-size: cover;
+/* ========== HERO SECTION ========== */
+.order-history-hero {
+  padding: 160px 0 60px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');
   background-position: center;
-  padding: 100px 0 60px;
-  color: white;
-  text-align: center;
+  background-size: cover;
   position: relative;
 }
 
-.order-hero:before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to right, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff);
-}
-
-.order-hero .container {
-  max-width: 1200px;
+.order-hero-content {
+  text-align: center;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.order-hero h1 {
+.order-hero-text h1 {
+  color: white;
   font-family: 'Fredoka One', cursive;
   font-size: 3.5rem;
-  margin-bottom: 20px;
-  color: white;
+  margin-bottom: 1.5rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  position: relative;
-  display: inline-block;
+  animation: order-fadeInUp 0.8s ease;
 }
 
-.order-hero h1:after {
-  content: '🍽️';
-  position: absolute;
-  right: -50px;
-  top: 0;
-  font-size: 2.5rem;
-}
-
-.order-hero p {
+.order-hero-text p {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.2rem;
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
+  line-height: 1.6;
   font-weight: 300;
+  animation: order-fadeInUp 1s ease;
 }
 
-/* Main Content */
-.order-main {
-  padding: 60px 0 80px;
+@keyframes order-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.order-main .container {
+/* ========== CONTENT WRAPPER ========== */
+.order-history-wrapper {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Order Actions */
-.order-actions {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.menu-btn {
-  padding: 16px 40px;
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  margin: -40px auto 0;
+  padding: 0 20px 60px;
   position: relative;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+  z-index: 2;
+}
+
+/* ========== MAIN CONTENT ========== */
+.order-history-main {
+  background: white;
+  border-radius: 25px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  position: relative;
   overflow: hidden;
 }
 
-.menu-btn:before {
+.order-history-main::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: 0.5s;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f3274c, #ffd40d);
+  background-size: 400% 100%;
+  animation: order-gradientFlow 3s ease infinite;
 }
 
-.menu-btn:hover:before {
-  left: 100%;
+@keyframes order-gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-.menu-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
-  color: white;
-}
-
-/* Orders Section */
-.orders-section {
-  background: white;
-  border-radius: 30px;
-  padding: 40px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(255, 107, 107, 0.1);
+/* ========== HEADER ========== */
+.order-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 40px;
-  position: relative;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.orders-section:before {
-  content: '🍕 🍔 🍣';
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 0 20px;
-  font-size: 1.5rem;
-}
-
-.orders-section h2 {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2.2rem;
-  color: #333;
-  margin-bottom: 30px;
-  position: relative;
-  padding-bottom: 15px;
-  text-align: center;
-}
-
-.orders-section h2:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f);
-  border-radius: 2px;
-}
-
-/* Orders Table */
-.orders-table-container {
-  overflow-x: auto;
-  border-radius: 15px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.orders-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-family: 'Epilogue', sans-serif;
-}
-
-.orders-table thead {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-}
-
-.orders-table th {
-  padding: 18px 20px;
+.order-heading-two {
   text-align: left;
-  font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  position: relative;
+  margin: 0;
 }
 
-.orders-table th:first-child {
-  border-top-left-radius: 15px;
-}
-
-.orders-table th:last-child {
-  border-top-right-radius: 15px;
-}
-
-.orders-table tbody tr {
-  transition: all 0.3s ease;
-}
-
-.orders-table tbody tr:nth-child(even) {
-  background: rgba(255, 107, 107, 0.02);
-}
-
-.orders-table tbody tr:hover {
-  background: rgba(255, 107, 107, 0.05);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.orders-table tbody tr.row-expanded {
-  background: rgba(255, 215, 61, 0.05);
-  box-shadow: 0 4px 12px rgba(255, 215, 61, 0.1);
-}
-
-.orders-table td {
-  padding: 20px;
-  color: #333;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  vertical-align: top;
-}
-
-/* Order ID */
-.order-id-display {
-  font-weight: 600;
-  color: #333;
-  font-size: 1.1rem;
+.order-heading-two h2 {
   font-family: 'Fredoka One', cursive;
-  background: linear-gradient(135deg, #ffd93d, #ffb347);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #000 0%, #333 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Date & Time */
-.order-date {
-  font-weight: 600;
-  color: #333;
-  font-size: 1rem;
+.order-line {
+  width: 200px;
+  height: 8px;
+  background: linear-gradient(90deg, #ffd40d, #f3274c);
+  border-radius: 20px;
+  margin: 10px 0 0 0;
 }
 
-.order-time {
-  color: #666;
-  font-size: 0.9rem;
-  margin-top: 4px;
+/* ========== STATS SUMMARY ========== */
+.order-stats-summary {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 30px;
 }
 
-.order-time i {
-  color: #ff6b6b;
-}
-
-/* Order Items with Images */
-.order-items {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 250px;
-}
-
-.item-with-image {
+.order-stat-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(255, 107, 107, 0.05);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 107, 107, 0.1);
-}
-
-.item-image {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+  padding: 15px;
   background: #f8f9fa;
-}
-
-.item-name {
-  font-size: 0.9rem;
-  color: #333;
-  font-weight: 500;
-}
-
-.more-items {
-  color: #ff6b6b;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-align: center;
-  margin-top: 5px;
-  display: inline-block;
-  padding: 4px 8px;
-  background: rgba(255, 107, 107, 0.1);
-  border-radius: 4px;
-}
-
-/* Order Total */
-.order-total {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.2rem;
-  color: #333;
-  font-weight: 600;
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(107, 207, 127, 0.1);
-  border-radius: 8px;
-}
-
-/* Status Badge */
-.order-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
+  border-radius: 12px;
   border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
 
-.status-completed {
-  background: linear-gradient(135deg, rgba(107, 207, 127, 0.1), rgba(139, 195, 74, 0.1));
-  color: #4CAF50;
-  border-color: rgba(76, 175, 80, 0.2);
+.order-stat-item:hover {
+  border-color: rgba(243, 39, 76, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-.status-preparing {
-  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 235, 59, 0.1));
-  color: #FF9800;
-  border-color: rgba(255, 152, 0, 0.2);
+.order-stat-item i {
+  font-size: 1.5rem;
+  color: #f3274c;
+  background: rgba(243, 39, 76, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.status-pending {
-  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(3, 169, 244, 0.1));
-  color: #2196F3;
-  border-color: rgba(33, 150, 243, 0.2);
+.order-stat-item h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: #333;
+  margin: 0;
+  line-height: 1;
 }
 
-.status-cancelled {
-  background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(239, 83, 80, 0.1));
-  color: #F44336;
-  border-color: rgba(244, 67, 54, 0.2);
+.order-stat-item p {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin: 5px 0 0 0;
+  font-size: 0.9rem;
 }
 
-/* Status Info Container */
-.status-info-container {
-  min-width: 200px;
-  position: relative;
-}
-
-.explain-btn {
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #4d96ff, #6bc5ff);
+.order-continue-shopping {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: 2px solid #f3274c;
+  border-radius: 12px;
   color: white;
-  border: none;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-continue-shopping:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.3);
+}
+
+/* ========== LOADING STATE ========== */
+.order-loading {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.order-loading-spinner {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-loading-spinner i {
+  font-size: 3rem;
+  color: #f3274c;
+}
+
+.order-loading-text {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* ========== ERROR STATE ========== */
+.order-error-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.order-error-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ff4757, #ff6b8b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.order-error-icon i {
+  font-size: 2.5rem;
+  color: white;
+}
+
+.order-error-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: #333;
+  margin: 0 0 15px 0;
+}
+
+.order-error-message {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin-bottom: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.order-retry-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: 2px solid #f3274c;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+.order-retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.3);
+}
+
+/* ========== EMPTY STATE ========== */
+.order-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.05), rgba(255, 212, 13, 0.05));
+  border-radius: 20px;
+  border: 2px solid rgba(243, 39, 76, 0.1);
+}
+
+.order-empty-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+}
+
+.order-empty-icon i {
+  font-size: 3rem;
+  color: white;
+}
+
+.order-empty-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #333;
+  margin: 0 0 15px 0;
+}
+
+.order-empty-text {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin: 0 auto 30px;
+  line-height: 1.5;
+}
+
+.order-empty-btn {
+  padding: 15px 35px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: 2px solid #f3274c;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  text-decoration: none;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  width: 100%;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(77, 150, 255, 0.2);
+  gap: 12px;
 }
 
-.explain-btn:hover {
+.order-empty-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(77, 150, 255, 0.3);
-  background: linear-gradient(135deg, #3a85ff, #5ab5ff);
+  box-shadow: 0 10px 20px rgba(243, 39, 76, 0.3);
 }
 
-.explain-btn.active {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2);
+/* ========== ORDERS GRID ========== */
+.orders-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.explain-btn.active:hover {
-  background: linear-gradient(135deg, #ff5555, #ff7a7a);
-  box-shadow: 0 6px 12px rgba(255, 107, 107, 0.3);
-}
-
-/* Status Explanation */
-.status-explanation {
-  margin-top: 10px;
+/* ========== ORDER CARD ========== */
+.order-card {
   background: white;
-  border-radius: 15px;
-  padding: 0;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border: 2px solid #ffd93d;
-  animation: slideIn 0.3s ease;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
   overflow: hidden;
 }
 
-@keyframes slideIn {
+.order-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(243, 39, 76, 0.15);
+  border-color: rgba(243, 39, 76, 0.2);
+}
+
+.order-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #f3274c, #ffd40d);
+}
+
+/* Order Header */
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f5f8fd;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.order-id-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-id-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.order-date {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-date i {
+  color: #f3274c;
+  font-size: 0.9rem;
+}
+
+.order-status-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.order-price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.order-status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-status-completed {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 2px solid rgba(76, 175, 80, 0.2);
+}
+
+.order-status-preparing {
+  background: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+  border: 2px solid rgba(255, 152, 0, 0.2);
+}
+
+.order-status-pending {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+  border: 2px solid rgba(33, 150, 243, 0.2);
+}
+
+.order-status-cancelled {
+  background: rgba(243, 39, 76, 0.1);
+  color: #f3274c;
+  border: 2px solid rgba(243, 39, 76, 0.2);
+}
+
+.order-status-delivery {
+  background: rgba(255, 193, 7, 0.1);
+  color: #FFC107;
+  border: 2px solid rgba(255, 193, 7, 0.2);
+}
+
+.order-status-default {
+  background: rgba(158, 158, 158, 0.1);
+  color: #9E9E9E;
+  border: 2px solid rgba(158, 158, 158, 0.2);
+}
+
+/* ========== RESTAURANT STATUS DETAILS SECTION ========== */
+.order-status-details-section {
+  margin-bottom: 25px;
+}
+
+.status-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.status-time-estimate {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.05), rgba(255, 212, 13, 0.05));
+  border-radius: 10px;
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  min-width: 200px;
+}
+
+.status-time-estimate i {
+  font-size: 1.3rem;
+  color: #f3274c;
+  background: rgba(243, 39, 76, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-time-estimate div {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-label {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.time-value {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.status-details-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border: 2px solid #f3274c;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-details-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(243, 39, 76, 0.3);
+}
+
+.status-details-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #666, #888);
+  border-color: #666;
+}
+
+/* Restaurant Status Box */
+.restaurant-status-box {
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.03), rgba(255, 212, 13, 0.03));
+  border-radius: 15px;
+  padding: 25px;
+  border: 2px solid rgba(243, 39, 76, 0.15);
+  animation: status-slideIn 0.5s ease;
+  box-shadow: 0 8px 25px rgba(243, 39, 76, 0.08);
+}
+
+@keyframes status-slideIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -422,509 +597,425 @@
   }
 }
 
-.status-explanation-header {
-  background: linear-gradient(135deg, #ffd93d, #ffb347);
-  padding: 15px 20px;
+.restaurant-status-header {
   display: flex;
   align-items: center;
   gap: 15px;
-  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(243, 39, 76, 0.1);
 }
 
 .restaurant-icon {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  color: #ff6b6b;
-}
-
-.restaurant-info-text h4 {
-  margin: 0;
-  color: #333;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.restaurant-name {
-  margin: 2px 0 0;
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.close-explanation {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.close-explanation:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg);
-}
-
-.status-explanation-content {
-  padding: 20px;
-  display: flex;
-  gap: 15px;
-  align-items: flex-start;
-  background: rgba(255, 217, 61, 0.05);
-}
-
-.explanation-icon {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #6bcf7f, #4d96ff);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.2rem;
 }
 
-.explanation-text {
-  font-size: 0.9rem;
-  color: #333;
-  line-height: 1.5;
+.restaurant-icon i {
+  color: white;
+  font-size: 1.4rem;
+}
+
+.restaurant-info {
   flex: 1;
 }
 
-.status-explanation-footer {
-  background: rgba(107, 207, 127, 0.1);
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-top: 1px solid rgba(107, 207, 127, 0.2);
-  color: #4CAF50;
-  font-size: 0.85rem;
-}
-
-.status-explanation-footer i {
-  color: #4CAF50;
-}
-
-/* Empty State */
-.empty-orders {
-  text-align: center;
-  padding: 60px 40px;
-}
-
-.empty-icon {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, 
-    rgba(255, 107, 107, 0.1) 0%,
-    rgba(255, 217, 61, 0.1) 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 25px;
-  border: 3px dashed #ff6b6b;
-}
-
-.empty-icon i {
-  font-size: 3rem;
-  color: #ff6b6b;
-}
-
-.empty-orders h3 {
+.restaurant-info h4 {
   font-family: 'Fredoka One', cursive;
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.empty-orders p {
-  color: #666;
-  font-size: 1.1rem;
-  max-width: 400px;
-  margin: 0 auto 25px;
-  line-height: 1.6;
-}
-
-.start-shopping-btn {
-  padding: 12px 30px;
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 15px rgba(255, 107, 107, 0.2);
-}
-
-.start-shopping-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 20px rgba(255, 107, 107, 0.3);
-  color: white;
-}
-
-/* Restaurant Contact Info */
-.restaurant-info {
-  background: linear-gradient(135deg, #333, #555);
-  color: white;
-  padding: 30px;
-  border-radius: 20px;
-  margin-top: 40px;
-  text-align: center;
-  border: 2px solid #ffd93d;
-  position: relative;
-}
-
-.restaurant-info:before {
-  content: '🏆';
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  padding: 0 15px;
-  font-size: 1.5rem;
-}
-
-.restaurant-contact-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.restaurant-contact-header i {
-  font-size: 2rem;
-  color: #ffd93d;
-}
-
-.restaurant-info h3 {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.8rem;
-  margin-bottom: 0;
-  color: #ffd93d;
-}
-
-.restaurant-info > p {
-  margin-bottom: 25px;
-  opacity: 0.9;
-  font-size: 1.1rem;
-}
-
-.contact-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-
-.contact-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.contact-item i {
-  color: #ffd93d;
   font-size: 1.2rem;
-}
-
-.contact-item span {
-  font-size: 0.95rem;
-}
-
-.contact-item strong {
-  color: #ffd93d;
-}
-
-/* Loading State */
-.order-loading {
-  text-align: center;
-  padding: 100px 0;
-}
-
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 107, 107, 0.1);
-  border-radius: 50%;
-  border-top-color: #ff6b6b;
-  animation: spin 1s ease-in-out infinite;
-  margin: 0 auto 20px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.order-loading p {
-  color: #666;
-  font-size: 1rem;
-}
-
-/* Error State */
-.order-error {
-  text-align: center;
-  padding: 100px 20px;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.error-icon {
-  font-size: 4rem;
-  color: #ff6b6b;
-  margin-bottom: 20px;
-}
-
-.order-error h3 {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.8rem;
   color: #333;
+  margin: 0 0 5px 0;
+}
+
+.restaurant-time {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.restaurant-time i {
+  color: #f3274c;
+  font-size: 0.8rem;
+}
+
+/* Status Details Content */
+.status-details-content {
+  padding: 10px 0;
+}
+
+.status-description {
+  font-family: 'Epilogue', sans-serif;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  padding-left: 15px;
+  border-left: 3px solid #f3274c;
+}
+
+.status-next-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(139, 195, 74, 0.05));
+  border-radius: 8px;
+  border: 2px solid rgba(76, 175, 80, 0.1);
+}
+
+.status-next-step i {
+  color: #4CAF50;
+  font-size: 0.9rem;
+}
+
+.status-next-step span {
+  font-family: 'Epilogue', sans-serif;
+  color: #4CAF50;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Order Items */
+.order-items-section {
+  margin-bottom: 25px;
+}
+
+.order-items-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
-.order-error p {
-  color: #666;
-  margin-bottom: 25px;
-  line-height: 1.6;
+.order-items-header i {
+  color: #f3274c;
+  font-size: 1.1rem;
 }
 
-.retry-btn {
-  padding: 12px 30px;
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-  color: white;
-  border: none;
-  border-radius: 50px;
+.order-items-header h4 {
   font-family: 'Epilogue', sans-serif;
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
   font-weight: 600;
-  cursor: pointer;
+}
+
+.order-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid transparent;
   transition: all 0.3s ease;
-  display: inline-flex;
+}
+
+.order-item:hover {
+  border-color: rgba(243, 39, 76, 0.2);
+  transform: translateX(5px);
+}
+
+.order-item-image {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-item-details {
+  flex: 1;
+}
+
+.item-name {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-quantity {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item-quantity i {
+  color: #f3274c;
+  font-size: 0.8rem;
+}
+
+.item-price {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Order Footer */
+.order-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 2px solid #f5f8fd;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-total span:first-child {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.total-amount {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  color: #f3274c;
+}
+
+/* Order Tips Section */
+.order-tips-section {
+  margin-top: 50px;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.05), rgba(255, 212, 13, 0.05));
+  border-radius: 20px;
+  border: 2px solid rgba(243, 39, 76, 0.1);
+}
+
+.order-tips-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.order-tips-header i {
+  font-size: 1.5rem;
+  color: #f3274c;
+  background: rgba(243, 39, 76, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  box-shadow: 0 8px 15px rgba(255, 107, 107, 0.2);
 }
 
-.retry-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 20px rgba(255, 107, 107, 0.3);
+.order-tips-header h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .orders-table th:nth-child(6),
-  .orders-table td:nth-child(6) {
-    max-width: 250px;
-  }
+.order-tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
 }
 
+.order-tip {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.order-tip:hover {
+  transform: translateY(-5px);
+  border-color: rgba(243, 39, 76, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.tip-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tip-icon i {
+  color: white;
+  font-size: 1.3rem;
+}
+
+.tip-content {
+  flex: 1;
+}
+
+.tip-content h4 {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1rem;
+  color: #333;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.tip-content p {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 992px) {
-  .order-hero h1 {
+  .order-history-hero {
+    padding: 140px 0 50px;
+  }
+  
+  .order-hero-text h1 {
     font-size: 2.8rem;
   }
   
-  .orders-section {
-    padding: 30px;
+  .order-heading-two h2 {
+    font-size: 2rem;
   }
   
-  .orders-table th,
-  .orders-table td {
-    padding: 15px 12px;
+  .order-history-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
-  .status-info-container {
-    min-width: 180px;
+  .order-stats-summary {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .status-details-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .status-time-estimate {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .status-details-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 768px) {
-  .order-hero {
-    padding: 80px 0 40px;
+  .order-history-hero {
+    padding: 120px 0 40px;
   }
   
-  .order-hero h1 {
-    font-size: 2.3rem;
+  .order-hero-text h1 {
+    font-size: 2.2rem;
   }
   
-  .order-hero h1:after {
-    right: -40px;
-    font-size: 2rem;
-  }
-  
-  .orders-section h2 {
-    font-size: 1.8rem;
-  }
-  
-  .menu-btn,
-  .start-shopping-btn,
-  .retry-btn {
-    padding: 14px 30px;
+  .order-hero-text p {
     font-size: 1rem;
   }
   
-  .orders-table {
-    display: block;
+  .order-history-wrapper {
+    padding: 0 15px 40px;
   }
   
-  .orders-table thead {
-    display: none;
+  .order-history-main {
+    padding: 25px;
   }
   
-  .orders-table tbody tr {
-    display: block;
-    margin-bottom: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    padding: 15px;
-    background: white;
+  .order-card-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
-  .orders-table tbody tr.row-expanded {
-    border-color: #ffd93d;
+  .order-status-section {
+    align-items: flex-start;
   }
   
-  .orders-table tbody tr:hover {
-    transform: translateY(-2px);
+  .restaurant-status-header {
+    flex-direction: column;
+    text-align: center;
   }
   
-  .orders-table td {
-    display: block;
-    text-align: right;
-    padding: 10px 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  .restaurant-icon {
+    margin: 0 auto;
   }
   
-  .orders-table td:before {
-    content: attr(data-label);
-    float: left;
-    font-weight: 600;
-    color: #333;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-  }
-  
-  .orders-table td:last-child {
-    border-bottom: none;
-  }
-  
-  .status-info-container {
-    text-align: right;
-  }
-  
-  .explain-btn {
-    width: auto;
-    display: inline-flex;
-  }
-  
-  .status-explanation {
-    text-align: left;
-  }
-  
-  .contact-details {
+  .order-tips-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 576px) {
-  .orders-section {
-    padding: 25px 20px;
-    border-radius: 20px;
+  .order-hero-text h1 {
+    font-size: 1.8rem;
   }
   
-  .order-hero h1 {
-    font-size: 2rem;
+  .order-history-main {
+    padding: 20px;
   }
   
-  .order-hero h1:after {
-    position: static;
-    display: block;
-    margin-top: 10px;
-  }
-  
-  .order-hero p {
-    font-size: 1rem;
-  }
-  
-  .empty-orders {
-    padding: 40px 20px;
-  }
-  
-  .empty-icon {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .empty-icon i {
-    font-size: 2.5rem;
-  }
-  
-  .empty-orders h3 {
-    font-size: 1.5rem;
-  }
-  
-  .order-items {
-    max-width: none;
-  }
-  
-  .item-with-image {
+  .order-stats-summary {
     flex-direction: column;
-    text-align: center;
+    gap: 15px;
   }
   
-  .item-image {
-    width: 50px;
-    height: 50px;
+  .order-stat-item {
+    width: 100%;
   }
-}
-
-/* Custom Scrollbar */
-.orders-table-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.orders-table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-.orders-table-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
-  border-radius: 4px;
-}
-
-.orders-table-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #ff5555, #ffc947);
+  
+  .order-continue-shopping {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .restaurant-status-box {
+    padding: 20px;
+  }
+  
+  .status-description {
+    font-size: 0.9rem;
+  }
 }
