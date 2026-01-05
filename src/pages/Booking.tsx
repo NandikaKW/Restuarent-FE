@@ -12,6 +12,7 @@ const Booking: React.FC = () => {
   const { bookings, loading, error, createBooking, fetchUserBookings, cancelBooking } = useBooking();
   const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
+  //Reading The Redux State from here (comes from Redux Store)
   const uiLoading = useSelector((state: RootState) => state.ui.loading);
   const uiMessage = useSelector((state: RootState) => state.ui.message);
 
@@ -41,7 +42,7 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    //Dispatching Actions
     dispatch(clearMessage());
     dispatch(startLoading());
 
@@ -50,6 +51,7 @@ const Booking: React.FC = () => {
     const result = await createBooking(formData);
     
     if (result.success) {
+      //Dispatching Actions
       dispatch(setMessage('Booking created successfully! 🎉'));
       
       setFormData({
@@ -69,7 +71,7 @@ const Booking: React.FC = () => {
     } else {
       dispatch(setMessage(result.message || 'Failed to create booking. Please try again.'));
     }
-    
+    //Dispatching Actions
     dispatch(stopLoading());
     
     setTimeout(() => {

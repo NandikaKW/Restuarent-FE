@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { adminUserService } from '../../services/adminUserService';
 import type { AdminUser, UserStats } from '../../types/admin';
+import "../../components/componentStyles/AdminUserManagement.css";
 
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
   
   // Add User Form State
   const [showAddForm, setShowAddForm] = useState(false);
@@ -132,12 +134,6 @@ const UserManagement: React.FC = () => {
     }
   };
 
-  const getRoleColor = (role: string) => {
-    return role === 'admin' 
-      ? 'bg-purple-100 text-purple-800' 
-      : 'bg-blue-100 text-blue-800';
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -159,190 +155,257 @@ const UserManagement: React.FC = () => {
     setShowAddForm(false);
   };
 
-  if (loading) {
+  // Filter users based on search
+  const filteredUsers = users.filter(user => {
+    const searchTerm = search.toLowerCase();
     return (
-      <div className="flex justify-center items-center py-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-      </div>
+      user.firstName.toLowerCase().includes(searchTerm) ||
+      user.lastName.toLowerCase().includes(searchTerm) ||
+      user.email.toLowerCase().includes(searchTerm) ||
+      user.role.toLowerCase().includes(searchTerm)
     );
-  }
+  });
 
   return (
-    <div className="space-y-6">
-      {/* Header with Actions */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
-          <p className="text-sm text-gray-600">Manage users and create new admin accounts</p>
+    <div className="user-management-container">
+      {/* Header Section */}
+      <div className="um-header">
+        <h2>User Management</h2>
+        <p>Manage user accounts and create new administrator accounts</p>
+      </div>
+
+      {/* Stats Cards */}
+      {stats && (
+        <div className="um-stats">
+          <div className="um-stat-card">
+            <div className="um-stat-icon">
+              <i className="fas fa-users"></i>
+            </div>
+            <div className="um-stat-content">
+              <h3>{stats.totalUsers}</h3>
+              <p>Total Users</p>
+            </div>
+          </div>
+          
+          <div className="um-stat-card">
+            <div className="um-stat-icon">
+              <i className="fas fa-crown"></i>
+            </div>
+            <div className="um-stat-content">
+              <h3>{stats.adminUsers}</h3>
+              <p>Administrators</p>
+            </div>
+          </div>
+          
+          <div className="um-stat-card">
+            <div className="um-stat-icon">
+              <i className="fas fa-user"></i>
+            </div>
+            <div className="um-stat-content">
+              <h3>{stats.regularUsers}</h3>
+              <p>Regular Users</p>
+            </div>
+          </div>
+          
+          <div className="um-stat-card">
+            <div className="um-stat-icon">
+              <i className="fas fa-user-plus"></i>
+            </div>
+            <div className="um-stat-content">
+              <h3>{stats.usersToday}</h3>
+              <p>New Today</p>
+            </div>
+          </div>
         </div>
-        <div className="flex space-x-2">
+      )}
+
+      {/* Control Bar */}
+      <div className="um-controls">
+        <div className="um-search">
+          <i className="fas fa-search"></i>
+          <input
+            type="text"
+            placeholder="Search users by name, email, or role..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="um-search-input"
+          />
+        </div>
+        
+        <div className="um-actions">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className={`px-4 py-2 rounded-md font-medium ${
-              showAddForm 
-                ? 'bg-gray-600 hover:bg-gray-700 text-white' 
-                : 'bg-green-600 hover:bg-green-700 text-white'
-            }`}
+            className={`um-action-btn ${showAddForm ? 'um-action-cancel' : 'um-action-add'}`}
           >
-            {showAddForm ? 'Cancel' : '➕ Add New User'}
+            <i className={`fas ${showAddForm ? 'fa-times' : 'fa-user-plus'}`}></i>
+            {showAddForm ? 'Cancel' : 'Add New User'}
           </button>
           <button
             onClick={fetchUsers}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium"
+            className="um-action-btn um-action-refresh"
           >
-            🔄 Refresh
+            <i className="fas fa-sync-alt"></i>
+            Refresh
           </button>
         </div>
       </div>
 
-      {/* Error Message */}
+      {/* Error State */}
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <div className="flex justify-between items-center">
-            <span>{error}</span>
-            <button 
-              onClick={() => setError(null)}
-              className="text-red-900 font-bold text-lg"
-            >
-              ×
-            </button>
-          </div>
+        <div className="um-error">
+          <i className="fas fa-exclamation-circle"></i>
+          <span>Error: {error}</span>
+          <button 
+            onClick={() => setError(null)}
+            className="um-error-close"
+          >
+            ×
+          </button>
         </div>
       )}
 
       {/* Add User Form */}
       {showAddForm && (
-        <div className="bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New User Account</h3>
-          <form onSubmit={handleCreateUser} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="um-form-container">
+          <div className="um-form-header">
+            <h3>Create New User Account</h3>
+            <p>Fill in the details below to create a new user account</p>
+          </div>
+          
+          <form onSubmit={handleCreateUser} className="um-form">
+            <div className="um-form-grid">
               {/* First Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="um-form-group">
+                <label className="um-form-label">
+                  <i className="fas fa-user"></i>
                   First Name *
                 </label>
                 <input
                   type="text"
                   value={newUser.firstName}
                   onChange={(e) => setNewUser({...newUser, firstName: e.target.value})}
-                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    formErrors.firstName ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`um-form-input ${formErrors.firstName ? 'um-input-error' : ''}`}
                   placeholder="Enter first name"
                 />
                 {formErrors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>
+                  <p className="um-form-error">{formErrors.firstName}</p>
                 )}
               </div>
 
               {/* Last Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="um-form-group">
+                <label className="um-form-label">
+                  <i className="fas fa-user"></i>
                   Last Name *
                 </label>
                 <input
                   type="text"
                   value={newUser.lastName}
                   onChange={(e) => setNewUser({...newUser, lastName: e.target.value})}
-                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    formErrors.lastName ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`um-form-input ${formErrors.lastName ? 'um-input-error' : ''}`}
                   placeholder="Enter last name"
                 />
                 {formErrors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>
+                  <p className="um-form-error">{formErrors.lastName}</p>
                 )}
               </div>
 
               {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="um-form-group">
+                <label className="um-form-label">
+                  <i className="fas fa-envelope"></i>
                   Email Address *
                 </label>
                 <input
                   type="email"
                   value={newUser.email}
                   onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    formErrors.email ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`um-form-input ${formErrors.email ? 'um-input-error' : ''}`}
                   placeholder="user@example.com"
                 />
                 {formErrors.email && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>
+                  <p className="um-form-error">{formErrors.email}</p>
                 )}
               </div>
 
               {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="um-form-group">
+                <label className="um-form-label">
+                  <i className="fas fa-lock"></i>
                   Password *
                 </label>
                 <input
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser({...newUser, password: e.target.value})}
-                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    formErrors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`um-form-input ${formErrors.password ? 'um-input-error' : ''}`}
                   placeholder="Minimum 6 characters"
                 />
                 {formErrors.password && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.password}</p>
+                  <p className="um-form-error">{formErrors.password}</p>
                 )}
               </div>
 
               {/* Role */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="um-form-group um-form-full">
+                <label className="um-form-label">
+                  <i className="fas fa-user-tag"></i>
                   User Role *
                 </label>
-                <div className="flex space-x-4">
-                  <label className="inline-flex items-center">
+                <div className="um-role-selection">
+                  <label className={`um-role-option ${newUser.role === 'user' ? 'um-role-selected' : ''}`}>
                     <input
                       type="radio"
                       name="role"
                       value="user"
                       checked={newUser.role === 'user'}
                       onChange={(e) => setNewUser({...newUser, role: e.target.value as 'user' | 'admin'})}
-                      className="text-green-600 focus:ring-green-500"
+                      className="um-role-input"
                     />
-                    <span className="ml-2">Regular User</span>
+                    <div className="um-role-content">
+                      <i className="fas fa-user"></i>
+                      <div>
+                        <h4>Regular User</h4>
+                        <p>Standard customer access</p>
+                      </div>
+                    </div>
                   </label>
-                  <label className="inline-flex items-center">
+                  
+                  <label className={`um-role-option ${newUser.role === 'admin' ? 'um-role-selected' : ''}`}>
                     <input
                       type="radio"
                       name="role"
                       value="admin"
                       checked={newUser.role === 'admin'}
                       onChange={(e) => setNewUser({...newUser, role: e.target.value as 'user' | 'admin'})}
-                      className="text-green-600 focus:ring-green-500"
+                      className="um-role-input"
                     />
-                    <span className="ml-2 font-semibold text-purple-600">Administrator</span>
+                    <div className="um-role-content">
+                      <i className="fas fa-crown"></i>
+                      <div>
+                        <h4>Administrator</h4>
+                        <p>Full admin dashboard access</p>
+                      </div>
+                    </div>
                   </label>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
-                  {newUser.role === 'admin' 
-                    ? 'This user will have full access to admin dashboard'
-                    : 'This user will have regular customer access'
-                  }
-                </p>
               </div>
             </div>
 
             {/* Form Actions */}
-            <div className="flex justify-end space-x-3 pt-4 border-t">
+            <div className="um-form-actions">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="um-form-cancel"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium"
+                className="um-form-submit"
               >
+                <i className="fas fa-user-plus"></i>
                 Create User Account
               </button>
             </div>
@@ -350,140 +413,124 @@ const UserManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Stats Cards */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-500">Total Users</h3>
-            <p className="text-2xl font-bold text-gray-900">{stats.totalUsers}</p>
+      {/* Loading State */}
+      {loading ? (
+        <div className="um-loading">
+          <div className="um-loading-spinner"></div>
+          <p className="um-loading-text">Loading users...</p>
+        </div>
+      ) : filteredUsers.length === 0 ? (
+        /* Empty State */
+        <div className="um-empty">
+          <div className="um-empty-icon">
+            <i className="fas fa-users-slash"></i>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-500">Administrators</h3>
-            <p className="text-2xl font-bold text-purple-600">{stats.adminUsers}</p>
+          <h3>No Users Found</h3>
+          <p>
+            {search 
+              ? "No users found matching your search criteria."
+              : "No users found. Click 'Add New User' to create your first user account."
+            }
+          </p>
+        </div>
+      ) : (
+        /* Table Container */
+        <div className="um-table-container">
+          <div className="um-table-header">
+            <h3>User Accounts ({filteredUsers.length})</h3>
+            <div className="um-table-stats">
+              Showing <strong>{filteredUsers.length}</strong> of <strong>{users.length}</strong> users
+            </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-500">Regular Users</h3>
-            <p className="text-2xl font-bold text-blue-600">{stats.regularUsers}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-500">New Today</h3>
-            <p className="text-2xl font-bold text-green-600">{stats.usersToday}</p>
-          </div>
+          
+          <table className="um-table">
+            <thead>
+              <tr>
+                <th>User Profile</th>
+                <th>Contact Information</th>
+                <th>Role</th>
+                <th>Account Details</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.map((user) => (
+                <tr key={user._id} className="um-table-row">
+                  {/* User Profile Column */}
+                  <td className="um-user-profile">
+                    <div className="um-user-avatar">
+                      <span className="um-avatar-text">
+                        {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                      </span>
+                    </div>
+                    <div className="um-user-info">
+                      <div className="um-user-name">{user.firstName} {user.lastName}</div>
+                      <div className="um-user-id">ID: {user._id.substring(0, 8)}...</div>
+                    </div>
+                  </td>
+
+                  {/* Contact Information Column */}
+                  <td className="um-contact-info">
+                    <div className="um-user-email">
+                      <i className="fas fa-envelope"></i>
+                      {user.email}
+                    </div>
+                  </td>
+
+                  {/* Role Column */}
+                  <td className="um-role">
+                    <span className={`um-role-badge ${user.role === 'admin' ? 'um-role-admin' : 'um-role-user'}`}>
+                      <i className={`fas ${user.role === 'admin' ? 'fa-crown' : 'fa-user'}`}></i>
+                      {user.role === 'admin' ? 'Administrator' : 'Regular User'}
+                    </span>
+                  </td>
+
+                  {/* Account Details Column */}
+                  <td className="um-account-details">
+                    <div className="um-join-date">
+                      <i className="far fa-calendar-alt"></i>
+                      Joined {formatDate(user.createdAt)}
+                    </div>
+                  </td>
+
+                  {/* Actions Column */}
+                  <td className="um-table-actions">
+                    <div className="um-action-buttons">
+                      {user.role === 'user' ? (
+                        <button
+                          onClick={() => updateUserRole(user._id, 'admin')}
+                          className="um-action-promote"
+                          title="Promote to Administrator"
+                        >
+                          <i className="fas fa-arrow-up"></i>
+                          Make Admin
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => updateUserRole(user._id, 'user')}
+                          className="um-action-demote"
+                          title="Demote to Regular User"
+                        >
+                          <i className="fas fa-arrow-down"></i>
+                          Make User
+                        </button>
+                      )}
+                      <button
+                        onClick={() => deleteUser(user._id)}
+                        className="um-action-delete"
+                        title="Delete User Account"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      {/* Users Table */}
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="px-6 py-4 bg-gray-50 border-b">
-          <h3 className="text-lg font-semibold text-gray-900">
-            User Accounts ({users.length})
-          </h3>
-        </div>
-        
-        {users.length === 0 ? (
-          <div className="p-8 text-center">
-            <svg
-              className="mx-auto h-16 w-16 text-gray-400 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No users found</h3>
-            <p className="text-gray-600">Click "Add New User" to create your first user account.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Joined Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-blue-800 font-medium">
-                            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-                          </span>
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.firstName} {user.lastName}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.email}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                        {user.role === 'admin' ? '👑 Administrator' : '👤 Regular User'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDate(user.createdAt)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-3">
-                        {user.role === 'user' ? (
-                          <button
-                            onClick={() => updateUserRole(user._id, 'admin')}
-                            className="text-purple-600 hover:text-purple-900 font-medium"
-                            title="Promote to Administrator"
-                          >
-                            Make Admin
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => updateUserRole(user._id, 'user')}
-                            className="text-blue-600 hover:text-blue-900 font-medium"
-                            title="Demote to Regular User"
-                          >
-                            Make User
-                          </button>
-                        )}
-                        <button
-                          onClick={() => deleteUser(user._id)}
-                          className="text-red-600 hover:text-red-900 font-medium"
-                          title="Delete User Account"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
