@@ -9,7 +9,8 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [showStoryPopup, setShowStoryPopup] = useState(false);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/N47kapFfXl0');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/V5w1OGknhlc');
+
 
   const chefs = [
     {
@@ -102,7 +103,7 @@ const Dashboard: React.FC = () => {
           ></iframe>
         </div>
         <p className="video-description">
-          Watch the story behind Delicious Bites - A journey of passion, flavor, and culinary excellence.
+          A delicious burger-making food video showcasing fresh ingredients and mouth-watering preparation.
         </p>
       </div>
     </div>

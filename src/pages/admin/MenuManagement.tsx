@@ -1,7 +1,62 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { adminMenuService } from "../../services/adminMenuService";
 import type { MenuItem } from "../../services/adminMenuService";
 import "../../components/componentStyles/AdminMenuManagement.css";
+
+// Custom Alert Component
+interface AlertProps {
+  type: 'success' | 'error' | 'warning' | 'info';
+  message: string;
+  onClose: () => void;
+  duration?: number;
+}
+
+const CustomAlert: React.FC<AlertProps> = ({ type, message, onClose, duration = 3000 }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, duration);
+    
+    return () => clearTimeout(timer);
+  }, [duration, onClose]);
+  
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-times-circle',
+    warning: 'fa-exclamation-triangle',
+    info: 'fa-leaf' // Using leaf icon for info alerts
+  };
+  
+  const bgColors = {
+    success: 'menu-mgmt-alert-success',
+    error: 'menu-mgmt-alert-error',
+    warning: 'menu-mgmt-alert-warning',
+    info: 'menu-mgmt-alert-info'
+  };
+  
+  return (
+    <div className={`menu-mgmt-alert ${bgColors[type]}`}>
+      <div className="menu-mgmt-alert-content">
+        <i className={`fas ${icons[type]} menu-mgmt-alert-icon`}></i>
+        <div className="menu-mgmt-alert-text">
+          <span className="menu-mgmt-alert-title">
+            {type === 'success' && 'Success!'}
+            {type === 'error' && 'Error!'}
+            {type === 'warning' && 'Warning!'}
+            {type === 'info' && 'Confirm'}
+          </span>
+          <span className="menu-mgmt-alert-message">{message}</span>
+        </div>
+      </div>
+      <button 
+        onClick={onClose}
+        className="menu-mgmt-alert-close"
+      >
+        <i className="fas fa-times"></i>
+      </button>
+    </div>
+  );
+};
 
 const MenuManagement: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -23,6 +78,13 @@ const MenuManagement: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  // Alert state
+  const [alerts, setAlerts] = useState<Array<{
+    id: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+    message: string;
+  }>>([]);
+
   // Category options
   const categoryOptions = [
     { value: "pizza", label: "Pizza", icon: "🍕" },
@@ -36,6 +98,17 @@ const MenuManagement: React.FC = () => {
   useEffect(() => {
     fetchMenuItems(page);
   }, [page]);
+
+  // Alert helper function
+  const showAlert = useCallback((type: 'success' | 'error' | 'warning' | 'info', message: string) => {
+    const id = Date.now().toString();
+    setAlerts(prev => [...prev, { id, type, message }]);
+  }, []);
+
+  // Remove alert
+  const removeAlert = useCallback((id: string) => {
+    setAlerts(prev => prev.filter(alert => alert.id !== id));
+  }, []);
 
   const fetchMenuItems = async (pageNumber: number) => {
     setLoading(true);
@@ -67,7 +140,7 @@ const MenuManagement: React.FC = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !price || !image) {
-      alert("Title, price & image are required.");
+      showAlert('warning', "Title, price & image are required.");
       return;
     }
 
@@ -80,11 +153,12 @@ const MenuManagement: React.FC = () => {
 
     try {
       await adminMenuService.createMenuItem(formData);
+      showAlert('success', "Menu item created successfully!");
       resetForm();
       setPage(1);
       fetchMenuItems(1);
     } catch (err: any) {
-      alert("Failed to create menu item");
+      showAlert('error', "Failed to create menu item. Please try again.");
     }
   };
 
@@ -101,23 +175,67 @@ const MenuManagement: React.FC = () => {
 
     try {
       await adminMenuService.updateMenuItem(selectedItem._id, formData);
+      showAlert('success', "Menu item updated successfully!");
       resetForm();
       setSelectedItem(null);
       fetchMenuItems(page);
     } catch (err) {
-      alert("Failed to update menu item");
+      showAlert('error', "Failed to update menu item. Please try again.");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this menu item?")) return;
+    // Custom confirmation dialog
+    const deleteConfirmed = await new Promise<boolean>((resolve) => {
+      const dialogContainer = document.createElement('div');
+      dialogContainer.innerHTML = `
+        <div class="menu-mgmt-confirm-dialog-overlay">
+          <div class="menu-mgmt-confirm-dialog">
+            <div class="menu-mgmt-confirm-header">
+              <i class="fas fa-leaf"></i>
+              <h3>Confirm Deletion</h3>
+            </div>
+            <div class="menu-mgmt-confirm-body">
+              <p>Are you sure you want to delete this menu item?</p>
+            </div>
+            <div class="menu-mgmt-confirm-actions">
+              <button class="menu-mgmt-confirm-cancel">
+                Cancel
+              </button>
+              <button class="menu-mgmt-confirm-delete">
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(dialogContainer);
+      
+      // Add event listeners
+      const cancelBtn = dialogContainer.querySelector('.menu-mgmt-confirm-cancel');
+      const deleteBtn = dialogContainer.querySelector('.menu-mgmt-confirm-delete');
+      
+      cancelBtn?.addEventListener('click', () => {
+        dialogContainer.remove();
+        resolve(false);
+      });
+      
+      deleteBtn?.addEventListener('click', () => {
+        dialogContainer.remove();
+        resolve(true);
+      });
+    });
+
+    if (!deleteConfirmed) return;
 
     try {
       await adminMenuService.deleteMenuItem(id);
+      showAlert('success', "Menu item deleted successfully!");
       fetchMenuItems(page);
     } catch (err: any) {
       console.error("Delete error:", err);
-      alert("Failed to delete menu item");
+      showAlert('error', "Failed to delete menu item. Please try again.");
     }
   };
 
@@ -135,6 +253,7 @@ const MenuManagement: React.FC = () => {
   const handleCancelEdit = () => {
     resetForm();
     setSelectedItem(null);
+    showAlert('info', "Edit cancelled. No changes were made.");
   };
 
   const resetForm = () => {
@@ -173,6 +292,18 @@ const MenuManagement: React.FC = () => {
 
   return (
     <div className="menu-mgmt-container">
+      {/* Alert Container */}
+      <div className="menu-mgmt-alert-container">
+        {alerts.map(alert => (
+          <CustomAlert
+            key={alert.id}
+            type={alert.type}
+            message={alert.message}
+            onClose={() => removeAlert(alert.id)}
+          />
+        ))}
+      </div>
+
       {/* Header Section */}
       <div className="menu-mgmt-header">
         <div className="menu-mgmt-header-content">

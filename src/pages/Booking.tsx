@@ -11,8 +11,9 @@ const Booking: React.FC = () => {
   const { user } = useAuth();
   const { bookings, loading, error, createBooking, fetchUserBookings, cancelBooking } = useBooking();
   const [showForm, setShowForm] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [bookingToCancel, setBookingToCancel] = useState<string | null>(null);
   const dispatch = useDispatch();
-  //Reading The Redux State from here (comes from Redux Store)
   const uiLoading = useSelector((state: RootState) => state.ui.loading);
   const uiMessage = useSelector((state: RootState) => state.ui.message);
 
@@ -42,18 +43,16 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //Dispatching Actions
     dispatch(clearMessage());
     dispatch(startLoading());
 
     await new Promise(res => setTimeout(res, 800));
-    
+
     const result = await createBooking(formData);
-    
+
     if (result.success) {
-      //Dispatching Actions
-      dispatch(setMessage('Booking created successfully! 🎉'));
-      
+      dispatch(setMessage('Booking created successfully! We will get back to you soon.'));
+
       setFormData({
         name: user ? `${user.firstName} ${user.lastName}` : '',
         email: user?.email || '',
@@ -63,37 +62,49 @@ const Booking: React.FC = () => {
         guests: 2,
         message: '',
       });
-      
+
       setTimeout(() => {
         setShowForm(false);
       }, 1000);
-      
+
     } else {
       dispatch(setMessage(result.message || 'Failed to create booking. Please try again.'));
     }
-    //Dispatching Actions
+
     dispatch(stopLoading());
-    
+
     setTimeout(() => {
       dispatch(clearMessage());
     }, 4000);
   };
 
-  const handleCancelBooking = async (id: string) => {
-    if (window.confirm('Are you sure you want to cancel this booking?')) {
+  const handleCancelClick = (id: string) => {
+    setBookingToCancel(id);
+    setShowCancelConfirm(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (bookingToCancel) {
       dispatch(startLoading());
       dispatch(setMessage('Cancelling booking...'));
-      
-      await cancelBooking(id);
-      
+
+      await cancelBooking(bookingToCancel);
+
       dispatch(setMessage('Booking cancelled successfully'));
-      
+      setShowCancelConfirm(false);
+      setBookingToCancel(null);
+
       dispatch(stopLoading());
-      
+
       setTimeout(() => {
         dispatch(clearMessage());
       }, 3000);
     }
+  };
+
+  const handleCancelConfirm = () => {
+    setShowCancelConfirm(false);
+    setBookingToCancel(null);
   };
 
   const handleRetry = () => {
@@ -115,6 +126,41 @@ const Booking: React.FC = () => {
 
   return (
     <div className="booking-container">
+      {/* Cancel Confirmation Alert */}
+      {showCancelConfirm && (
+        <div className="booking-alert-overlay">
+          <div className="booking-alert-container">
+            <div className="booking-alert-icon">
+              <i className="fa-solid fa-leaf"></i>
+            </div>
+            <h3 className="booking-alert-title">Cancel Reservation</h3>
+            <p className="booking-alert-message">Are you sure you want to cancel this reservation? This action cannot be undone.</p>
+            <div className="booking-alert-buttons">
+              <button
+                onClick={handleCancelConfirm}
+                className="booking-alert-btn booking-alert-btn-secondary"
+              >
+                Keep Reservation
+              </button>
+              <button
+                onClick={handleConfirmCancel}
+                disabled={uiLoading}
+                className="booking-alert-btn booking-alert-btn-primary"
+              >
+                {uiLoading ? (
+                  <>
+                    <span className="booking-alert-spinner"></span>
+                    Cancelling...
+                  </>
+                ) : (
+                  'Yes, Cancel It'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="booking-hero">
         <div className="booking-hero-content">
@@ -127,21 +173,30 @@ const Booking: React.FC = () => {
 
       <div className="booking-wrapper">
         <main className="booking-main">
-          {/* Redux Notification */}
+          {/* Booking Alert Message */}
           {uiMessage && (
-            <div className={`booking-notification booking-notification-${getMessageType(uiMessage)}`}>
-              <div className="booking-notification-content">
-                <span className="booking-notification-icon">
-                  {getMessageType(uiMessage) === 'success' ? '✓' : getMessageType(uiMessage) === 'error' ? '✗' : 'ⓘ'}
-                </span>
-                {uiMessage}
+            <div className={`booking-alert-message-container booking-alert-${getMessageType(uiMessage)}`}>
+              <div className="booking-alert-message-content">
+                <div className="booking-alert-message-icon">
+                  {getMessageType(uiMessage) === 'success' && <i className="fas fa-check-circle"></i>}
+                  {getMessageType(uiMessage) === 'error' && <i className="fas fa-exclamation-circle"></i>}
+                  {getMessageType(uiMessage) === 'info' && <i className="fa-solid fa-leaf"></i>}
+                </div>
+
+                <div className="booking-alert-message-text">
+                  <p>{uiMessage}</p>
+                </div>
+
+                <button
+                  className="booking-alert-message-close"
+                  onClick={() => dispatch(clearMessage())}
+                  aria-label="Close alert"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
               </div>
-              <button 
-                onClick={() => dispatch(clearMessage())}
-                className="booking-notification-close"
-              >
-                ×
-              </button>
+
+              <div className="booking-alert-message-progress"></div>
             </div>
           )}
 
@@ -177,7 +232,7 @@ const Booking: React.FC = () => {
                   <i className="fa-solid fa-calendar-plus"></i>
                   <h3>Make a Reservation</h3>
                 </div>
-                
+
                 {error && (
                   <div className="booking-error">
                     <i className="fas fa-exclamation-circle"></i>
@@ -366,7 +421,7 @@ const Booking: React.FC = () => {
                           {format(new Date(booking.date), 'MMM dd, yyyy')}
                         </div>
                       </div>
-                      
+
                       <div className="booking-status-section">
                         <div className="booking-guests">
                           <i className="fa-solid fa-user-friends"></i>
@@ -416,7 +471,7 @@ const Booking: React.FC = () => {
                     {/* Booking Footer */}
                     <div className="booking-card-footer">
                       <button
-                        onClick={() => handleCancelBooking(booking._id)}
+                        onClick={() => handleCancelClick(booking._id)}
                         disabled={uiLoading}
                         className="booking-cancel-btn"
                       >

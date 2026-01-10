@@ -1,9 +1,9 @@
-// services/orderStatusService.ts (NEW FILE)
+
 import { api } from "./api";
 
-// Local fallback explanations for offline/error scenarios
+
 const localStatusExplanations: { [key: string]: string } = {
-  // Common statuses with simple explanations
+  
   'pending': 'Order received and waiting for restaurant confirmation.',
   'confirmed': 'Restaurant has accepted your order.',
   'preparing': 'Your food is being prepared now.',
@@ -21,7 +21,7 @@ const localStatusExplanations: { [key: string]: string } = {
   'payment_failed': 'Payment was not successful.',
   'scheduled': 'Order is scheduled for later.',
   
-  // Additional common statuses
+  
   'processing': 'Order is being processed.',
   'accepted': 'Order accepted by restaurant.',
   'picked_up': 'Driver has picked up your order.',
@@ -32,17 +32,17 @@ const localStatusExplanations: { [key: string]: string } = {
 export const orderStatusService = {
   getExplanation: async (status: string): Promise<string> => {
     try {
-      // First try to get from backend
+      
       const response = await api.post("/order-status/explain", { status });
       return response.data.explanation;
     } catch (error) {
       console.log("Using local status explanation due to:", error);
       
-      // Use local fallback - try exact match
+      
       const normalizedStatus = status.toLowerCase().trim();
       let explanation = localStatusExplanations[normalizedStatus];
       
-      // If no exact match, try partial matching
+      
       if (!explanation) {
         for (const [key, value] of Object.entries(localStatusExplanations)) {
           if (normalizedStatus.includes(key) || key.includes(normalizedStatus)) {
@@ -52,7 +52,7 @@ export const orderStatusService = {
         }
       }
       
-      // Final fallback
+      
       if (!explanation) {
         explanation = `Your order status is "${status}". This means it's currently being processed in our system.`;
       }

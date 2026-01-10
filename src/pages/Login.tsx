@@ -11,6 +11,8 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -25,13 +27,19 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
+    setShowSuccess(false);
     setLoading(true);
 
     try {
       await login(formData);
-      navigate('/dashboard');
+      setSuccess('Login successful! Welcome back. Redirecting to dashboard...');
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -47,7 +55,7 @@ const Login: React.FC = () => {
       <section className="login-page-hero">
         <div className="login-hero-content">
           <div className="login-hero-text">
-            <h1>Welcome Back Foodie!</h1>
+            <h1>Welcome Back Delicious Bites!</h1>
             <p>Sign in to continue your delicious journey with us</p>
           </div>
         </div>
@@ -133,8 +141,6 @@ const Login: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Social Login Section Removed */}
             </div>
 
             {/* Login Form */}
@@ -146,6 +152,19 @@ const Login: React.FC = () => {
                   <button onClick={() => setError('')} className="login-error-close">
                     <i className="fa-solid fa-xmark"></i>
                   </button>
+                </div>
+              )}
+
+              {success && showSuccess && (
+                <div className="login-success-message">
+                  <i className="fa-solid fa-circle-check"></i>
+                  <div className="login-success-content">
+                    <h4>Welcome Back!</h4>
+                    <p>{success}</p>
+                  </div>
+                  <div className="login-success-progress">
+                    <div className="login-success-progress-bar"></div>
+                  </div>
                 </div>
               )}
 
@@ -199,7 +218,6 @@ const Login: React.FC = () => {
                       </div>
                       <span className="login-remember-text">Remember me</span>
                     </div>
-                    {/* Forgot Password Link Removed */}
                   </div>
                 </div>
 
@@ -220,8 +238,6 @@ const Login: React.FC = () => {
                     </>
                   )}
                 </button>
-
-                {/* Divider and Alternative Methods Section Removed */}
 
                 <div className="login-signup-section">
                   <div className="login-signup-text">

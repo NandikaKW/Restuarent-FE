@@ -862,3 +862,445 @@
     justify-content: center;
   }
 }
+
+
+/* ========== SUCCESS MESSAGE ========== */
+.signup-success-message {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: signup-slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+  grid-column: 1 / -1;
+}
+
+.signup-success-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: signup-shimmer 3s infinite;
+}
+
+@keyframes signup-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.signup-success-message i {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: signup-bounce 2s infinite;
+}
+
+@keyframes signup-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.signup-success-content {
+  flex: 1;
+}
+
+.signup-success-content h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  margin: 0 0 8px 0;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.signup-success-content p {
+  font-family: 'Epilogue', sans-serif;
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+.signup-success-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+}
+
+.signup-success-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: white;
+  animation: signup-progress 2s linear forwards;
+  transform-origin: left;
+}
+
+@keyframes signup-progress {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+/* ========== ENHANCED ERROR MESSAGE ========== */
+.signup-error-message {
+  animation: signup-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(255, 71, 87, 0.3);
+}
+
+@keyframes signup-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-2px); }
+  40%, 60% { transform: translateX(2px); }
+}
+
+.signup-error-message i {
+  background: rgba(255, 255, 255, 0.2);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: signup-pulse 2s infinite;
+}
+
+@keyframes signup-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.signup-error-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.signup-error-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* ========== ENHANCED PASSWORD STRENGTH ========== */
+.signup-password-strength-container {
+  margin-top: 15px;
+}
+
+.signup-password-strength {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  border: 2px solid #f5f8fd;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.signup-password-strength.weak {
+  border-color: #ffcdd2;
+  background: linear-gradient(135deg, #fff, #ffebee);
+}
+
+.signup-password-strength.medium {
+  border-color: #ffe0b2;
+  background: linear-gradient(135deg, #fff, #fff3e0);
+}
+
+.signup-password-strength.strong {
+  border-color: #c8e6c9;
+  background: linear-gradient(135deg, #fff, #e8f5e9);
+}
+
+.signup-strength-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.signup-strength-header i {
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strength-weak .signup-strength-header i {
+  color: #f3274c;
+  background: rgba(243, 39, 76, 0.1);
+}
+
+.strength-medium .signup-strength-header i {
+  color: #ff9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.strength-strong .signup-strength-header i {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.signup-strength-header span {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.strength-weak .signup-strength-header span {
+  color: #f3274c;
+}
+
+.strength-medium .signup-strength-header span {
+  color: #ff9800;
+}
+
+.strength-strong .signup-strength-header span {
+  color: #4CAF50;
+}
+
+.signup-strength-visual {
+  margin-bottom: 20px;
+}
+
+.signup-strength-bar {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.signup-strength-fill {
+  height: 100%;
+  width: 0;
+  transition: width 0.5s ease, background 0.5s ease;
+  border-radius: 4px;
+}
+
+.signup-strength-fill.strength-weak {
+  width: 33%;
+  background: linear-gradient(90deg, #f3274c, #ff6b8b);
+}
+
+.signup-strength-fill.strength-medium {
+  width: 66%;
+  background: linear-gradient(90deg, #ff9800, #ffb74d);
+}
+
+.signup-strength-fill.strength-strong {
+  width: 100%;
+  background: linear-gradient(90deg, #4CAF50, #66bb6a);
+}
+
+.signup-strength-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signup-strength-labels span {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.signup-strength-labels span.active {
+  font-weight: 700;
+  transform: translateY(-2px);
+}
+
+.strength-weak .signup-strength-labels span:nth-child(1).active {
+  color: #f3274c;
+}
+
+.strength-medium .signup-strength-labels span:nth-child(2).active {
+  color: #ff9800;
+}
+
+.strength-strong .signup-strength-labels span:nth-child(3).active {
+  color: #4CAF50;
+}
+
+.signup-strength-tips {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.signup-strength-tips p {
+  font-family: 'Epilogue', sans-serif;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.signup-strength-tips p i {
+  color: #ff9800;
+}
+
+.signup-strength-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.signup-strength-tips li {
+  font-family: 'Epilogue', sans-serif;
+  color: #666;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.signup-strength-tips li.met {
+  color: #4CAF50;
+}
+
+.signup-strength-tips li i {
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.signup-strength-tips li.met i {
+  color: #4CAF50;
+  animation: signup-iconPop 0.3s ease;
+}
+
+@keyframes signup-iconPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ========== LOADING STATE ENHANCEMENTS ========== */
+.signup-submit-button:disabled .fa-spinner {
+  animation: signup-spin 1s linear infinite;
+}
+
+@keyframes signup-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.signup-submit-button:disabled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: signup-loading 1.5s infinite;
+}
+
+@keyframes signup-loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ========== RESPONSIVE ENHANCEMENTS ========== */
+@media (max-width: 768px) {
+  .signup-success-message,
+  .signup-error-message {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .signup-success-message i,
+  .signup-error-message i {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .signup-success-content h4 {
+    font-size: 1.1rem;
+  }
+  
+  .signup-password-strength {
+    padding: 15px;
+  }
+  
+  .signup-strength-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .signup-strength-header i {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-success-message,
+  .signup-error-message {
+    padding: 15px;
+  }
+  
+  .signup-password-strength {
+    padding: 12px;
+  }
+  
+  .signup-strength-tips {
+    padding: 12px;
+  }
+  
+  .signup-strength-tips ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .signup-strength-tips li {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+  }
+}

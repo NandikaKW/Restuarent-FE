@@ -13,17 +13,34 @@ const Cart: React.FC = () => {
   const [placedOrder, setPlacedOrder] = useState<any>(null);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
+  // Alert states
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | "info">("success");
+
   const loading = cartLoading || orderLoading;
   const error = cartError || orderError;
 
   useEffect(() => {
     if (error) {
+      showAlertMessage(error, "error");
       const timer = setTimeout(() => {
         clearError?.();
       }, 5000);
       return () => clearTimeout(timer);
     }
   }, [error, clearError]);
+
+  const showAlertMessage = (message: string, type: "success" | "error" | "info") => {
+    setAlertMessage(message);
+    setAlertType(type);
+    setShowAlert(true);
+
+    // Auto-hide alert after 5 seconds
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 5000);
+  };
 
   const handleCheckout = async () => {
     try {
@@ -32,6 +49,7 @@ const Cart: React.FC = () => {
       setShowPaymentPopup(true);
     } catch (error) {
       console.error('Checkout failed:', error);
+      showAlertMessage("Failed to process checkout. Please try again.", "error");
     }
   };
 
@@ -44,19 +62,49 @@ const Cart: React.FC = () => {
     setShowPaymentPopup(false);
     setCheckoutSuccess(true);
     refreshCart();
+    showAlertMessage("Payment successful! Your order has been confirmed.", "success");
+  };
+
+  const handleClearCart = () => {
+    clearCart();
+    showAlertMessage("Cart cleared successfully!", "info");
   };
 
   // Show error message if any
   if (error && !checkoutSuccess) {
     return (
       <div className="cart-restaurant-container">
+        {/* Alert Message */}
+        {showAlert && (
+          <div className={`cart-alert cart-alert-${alertType}`}>
+            <div className="cart-alert-content">
+              <div className="cart-alert-icon">
+                {alertType === "success" && <i className="fas fa-check-circle"></i>}
+                {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+                {alertType === "info" && <i className="fas fa-info-circle"></i>}
+              </div>
+              <div className="cart-alert-message">
+                <p>{alertMessage}</p>
+              </div>
+              <button
+                className="cart-alert-close"
+                onClick={() => setShowAlert(false)}
+                aria-label="Close alert"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="cart-alert-progress"></div>
+          </div>
+        )}
+
         <div className="cart-container-wrapper">
           <div className="cart-error-message">
             <div className="error-content">
               <i className="fa-solid fa-exclamation-triangle"></i>
               <h3>Oops! Something went wrong</h3>
               <p>{error}</p>
-              <button 
+              <button
                 onClick={clearError}
                 className="cart-button"
               >
@@ -89,6 +137,30 @@ const Cart: React.FC = () => {
         />
         {/* Blurred background */}
         <div className="cart-restaurant-container blurred">
+          {/* Alert Message */}
+          {showAlert && (
+            <div className={`cart-alert cart-alert-${alertType}`}>
+              <div className="cart-alert-content">
+                <div className="cart-alert-icon">
+                  {alertType === "success" && <i className="fas fa-check-circle"></i>}
+                  {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+                  {alertType === "info" && <i className="fas fa-leaf"></i>}
+                </div>
+                <div className="cart-alert-message">
+                  <p>{alertMessage}</p>
+                </div>
+                <button
+                  className="cart-alert-close"
+                  onClick={() => setShowAlert(false)}
+                  aria-label="Close alert"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              <div className="cart-alert-progress"></div>
+            </div>
+          )}
+
           <div className="cart-container-wrapper">
             <div className="cart-hero-section">
               <div className="hero-content">
@@ -98,7 +170,7 @@ const Cart: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <section className="cart-gap">
               <div className="cart-container-wrapper">
                 <div className="cart-main-container">
@@ -117,7 +189,7 @@ const Cart: React.FC = () => {
                         <p className="summary-subtitle">Complete payment to confirm your order</p>
                       </div>
                     </div>
-                    
+
                     <div className="summary-details">
                       <div className="summary-row">
                         <span className="summary-label">Order Amount:</span>
@@ -153,6 +225,30 @@ const Cart: React.FC = () => {
   if (checkoutSuccess && placedOrder) {
     return (
       <div className="cart-restaurant-container">
+        {/* Alert Message */}
+        {showAlert && (
+          <div className={`cart-alert cart-alert-${alertType}`}>
+            <div className="cart-alert-content">
+              <div className="cart-alert-icon">
+                {alertType === "success" && <i className="fas fa-check-circle"></i>}
+                {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+                {alertType === "info" && <i className="fas fa-leaf"></i>}
+              </div>
+              <div className="cart-alert-message">
+                <p>{alertMessage}</p>
+              </div>
+              <button
+                className="cart-alert-close"
+                onClick={() => setShowAlert(false)}
+                aria-label="Close alert"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="cart-alert-progress"></div>
+          </div>
+        )}
+
         <div className="cart-container-wrapper">
           <div className="cart-success-message">
             <div className="success-content">
@@ -163,7 +259,7 @@ const Cart: React.FC = () => {
               <p className="success-subtitle">
                 Thank you for your order. Your delicious meal is being prepared!
               </p>
-              
+
               <div className="order-details-card">
                 <div className="order-header">
                   <i className="fa-solid fa-receipt"></i>
@@ -217,6 +313,30 @@ const Cart: React.FC = () => {
   if (!cart || cart.items.length === 0) {
     return (
       <div className="cart-restaurant-container">
+        {/* Alert Message */}
+        {showAlert && (
+          <div className={`cart-alert cart-alert-${alertType}`}>
+            <div className="cart-alert-content">
+              <div className="cart-alert-icon">
+                {alertType === "success" && <i className="fas fa-check-circle"></i>}
+                {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+                {alertType === "info" && <i className="fas fa-leaf"></i>}
+              </div>
+              <div className="cart-alert-message">
+                <p>{alertMessage}</p>
+              </div>
+              <button
+                className="cart-alert-close"
+                onClick={() => setShowAlert(false)}
+                aria-label="Close alert"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="cart-alert-progress"></div>
+          </div>
+        )}
+
         {/* Hero Section - Matching Dashboard */}
         <section className="cart-hero-section">
           <div className="cart-container-wrapper">
@@ -249,7 +369,7 @@ const Cart: React.FC = () => {
                     Browse Our Menu
                   </Link>
                 </div>
-                
+
                 <div className="featured-items">
                   <h4><i className="fa-solid fa-fire me-2"></i>Popular This Week</h4>
                   <div className="items-grid">
@@ -311,6 +431,30 @@ const Cart: React.FC = () => {
   // Original cart with items
   return (
     <div className="cart-restaurant-container">
+      {/* Alert Message */}
+      {showAlert && (
+        <div className={`cart-alert cart-alert-${alertType}`}>
+          <div className="cart-alert-content">
+            <div className="cart-alert-icon">
+              {alertType === "success" && <i className="fas fa-check-circle"></i>}
+              {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+              {alertType === "info" && <i className="fas fa-leaf"></i>}
+            </div>
+            <div className="cart-alert-message">
+              <p>{alertMessage}</p>
+            </div>
+            <button
+              className="cart-alert-close"
+              onClick={() => setShowAlert(false)}
+              aria-label="Close alert"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+          <div className="cart-alert-progress"></div>
+        </div>
+      )}
+
       {/* Hero Section - Matching Dashboard */}
       <section className="cart-hero-section">
         <div className="cart-container-wrapper">
@@ -333,7 +477,7 @@ const Cart: React.FC = () => {
                 <div className="cart-line"></div>
               </div>
               <button
-                onClick={clearCart}
+                onClick={handleClearCart}
                 disabled={loading}
                 className="cart-button cart-button-clear"
               >
@@ -355,7 +499,7 @@ const Cart: React.FC = () => {
                 <i className="fa-solid fa-file-invoice-dollar"></i>
                 <h3>Order Summary</h3>
               </div>
-              
+
               <div className="summary-details">
                 <div className="summary-row">
                   <span className="summary-label">Subtotal</span>
@@ -406,7 +550,7 @@ const Cart: React.FC = () => {
                   <i className="fa-solid fa-plus me-2"></i>
                   Continue Shopping
                 </Link>
-                <button 
+                <button
                   onClick={handleCheckout}
                   disabled={loading}
                   className="cart-button checkout-btn"

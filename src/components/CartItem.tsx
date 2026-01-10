@@ -1,5 +1,7 @@
 import type { CartItem as CartItemType } from '../types/cart';
 import { useCart } from '../contexts/CartContext';
+import '../components/componentStyles/CartItem.css';
+
 
 interface CartItemProps {
   item: CartItemType;
@@ -19,44 +21,64 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const subtotal = item.price * item.quantity;
 
   return (
-    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow-sm border">
-      <img
-        src={item.image}
-        alt={item.name}
-        className="w-16 h-16 object-cover rounded-md"
-      />
-      <div className="flex-1 min-w-0">
-        <h3 className="text-lg font-semibold text-gray-900 truncate">
-          {item.name}
-        </h3>
-        <p className="text-lg font-bold text-gray-900">${item.price.toFixed(2)}</p>
+    <div className="cart-item-card">
+      {/* Item Image */}
+      <div className="cart-item-image-container">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="cart-item-image"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80';
+          }}
+        />
       </div>
-      <div className="flex items-center space-x-2">
-        <button
-          onClick={() => handleQuantityChange(item.quantity - 1)}
-          disabled={loading || item.quantity <= 1}
-          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
-        >
-          <span className="text-lg font-semibold">-</span>
-        </button>
-        <span className="w-8 text-center font-semibold">{item.quantity}</span>
-        <button
-          onClick={() => handleQuantityChange(item.quantity + 1)}
-          disabled={loading}
-          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
-        >
-          <span className="text-lg font-semibold">+</span>
-        </button>
-      </div>
-      <div className="text-right min-w-20">
-        <p className="text-lg font-bold text-gray-900">${subtotal.toFixed(2)}</p>
-        <button
-          onClick={() => removeFromCart(item.menuItemId)}
-          disabled={loading}
-          className="text-red-600 hover:text-red-800 text-sm font-medium disabled:opacity-50 transition duration-200"
-        >
-          Remove
-        </button>
+
+      {/* Item Details */}
+      <div className="cart-item-details">
+        <div className="cart-item-header">
+          <h3 className="cart-item-title">{item.name}</h3>
+          <button
+            onClick={() => removeFromCart(item.menuItemId)}
+            disabled={loading}
+            className="cart-remove-btn"
+          >
+            <i className="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        
+        <div className="cart-item-price-section">
+          <span className="cart-item-unit-price">
+            ${item.price.toFixed(2)} each
+          </span>
+          <span className="cart-item-subtotal">
+            ${subtotal.toFixed(2)}
+          </span>
+        </div>
+
+        {/* Quantity Controls */}
+        <div className="cart-quantity-controls">
+          <button
+            onClick={() => handleQuantityChange(item.quantity - 1)}
+            disabled={loading || item.quantity <= 1}
+            className="cart-quantity-btn cart-quantity-minus"
+          >
+            <i className="fa-solid fa-minus"></i>
+          </button>
+          
+          <div className="cart-quantity-display">
+            <span className="cart-quantity-number">{item.quantity}</span>
+            <span className="cart-quantity-label">Qty</span>
+          </div>
+          
+          <button
+            onClick={() => handleQuantityChange(item.quantity + 1)}
+            disabled={loading}
+            className="cart-quantity-btn cart-quantity-plus"
+          >
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
     </div>
   );

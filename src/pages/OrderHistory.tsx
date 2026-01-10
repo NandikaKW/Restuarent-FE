@@ -24,6 +24,7 @@ interface Order {
 const OrderHistoryPage: React.FC = () => {
   const { orders, loading, error, getOrderHistory } = useOrder();
   const [statusDetails, setStatusDetails] = useState<{ [key: string]: string }>({});
+  const [expandedOrders, setExpandedOrders] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     getOrderHistory();
@@ -99,40 +100,48 @@ const OrderHistoryPage: React.FC = () => {
     return estimatedTimes[statusLower] || 'Processing...';
   };
 
-  const handleGetStatusDetails = async (orderId: string, status: string) => {
+  const toggleOrderDetails = async (orderId: string, status: string) => {
     if (!orderId) return;
-    if (statusDetails[orderId]) return;
 
-    try {
-      // Use the existing getExplanation method
-      const explanation = await orderStatusService.getExplanation(status);
-      setStatusDetails(prev => ({
-        ...prev,
-        [orderId]: explanation
-      }));
-    } catch (error) {
-      console.error("Failed to get status details:", error);
-      
-      const restaurantStatusMessages: { [key: string]: string } = {
-        'pending': 'Your order has been received and is awaiting confirmation from our kitchen team.',
-        'confirmed': 'Order confirmed! Our chefs have started preparing your meal. Estimated preparation time: 15-25 minutes.',
-        'preparing': 'Our kitchen team is actively preparing your order with fresh ingredients. Estimated completion: 10-15 minutes.',
-        'processing': 'Your order is being processed for quality check and packaging.',
-        'ready': 'Your order is ready! Please proceed to the pickup counter or wait for delivery.',
-        'out_for_delivery': 'Your order is on the way! Our delivery partner will arrive shortly.',
-        'delivered': 'Order has been successfully delivered. Enjoy your meal!',
-        'completed': 'Order completed successfully. Thank you for dining with us!',
-        'cancelled': 'This order has been cancelled as per your request or restaurant policy.',
-      };
-      
-      const statusKey = status.toLowerCase();
-      const fallback = restaurantStatusMessages[statusKey] || 
-        `Your order status: "${status}". Our restaurant team is handling your order.`;
-      
-      setStatusDetails(prev => ({
-        ...prev,
-        [orderId]: fallback
-      }));
+    // Toggle expanded state
+    const isExpanded = expandedOrders[orderId];
+    setExpandedOrders(prev => ({
+      ...prev,
+      [orderId]: !isExpanded
+    }));
+
+    // If we're expanding and don't have details yet, fetch them
+    if (!isExpanded && !statusDetails[orderId]) {
+      try {
+        const explanation = await orderStatusService.getExplanation(status);
+        setStatusDetails(prev => ({
+          ...prev,
+          [orderId]: explanation
+        }));
+      } catch (error) {
+        console.error("Failed to get status details:", error);
+        
+        const restaurantStatusMessages: { [key: string]: string } = {
+          'pending': 'Your order has been received and is awaiting confirmation from our kitchen team.',
+          'confirmed': 'Order confirmed! Our chefs have started preparing your meal. Estimated preparation time: 15-25 minutes.',
+          'preparing': 'Our kitchen team is actively preparing your order with fresh ingredients. Estimated completion: 10-15 minutes.',
+          'processing': 'Your order is being processed for quality check and packaging.',
+          'ready': 'Your order is ready! Please proceed to the pickup counter or wait for delivery.',
+          'out_for_delivery': 'Your order is on the way! Our delivery partner will arrive shortly.',
+          'delivered': 'Order has been successfully delivered. Enjoy your meal!',
+          'completed': 'Order completed successfully. Thank you for dining with us!',
+          'cancelled': 'This order has been cancelled as per your request or restaurant policy.',
+        };
+        
+        const statusKey = status.toLowerCase();
+        const fallback = restaurantStatusMessages[statusKey] || 
+          `Your order status: "${status}". Our restaurant team is handling your order.`;
+        
+        setStatusDetails(prev => ({
+          ...prev,
+          [orderId]: fallback
+        }));
+      }
     }
   };
 
@@ -223,6 +232,8 @@ const OrderHistoryPage: React.FC = () => {
             <div className="orders-grid">
               {orders.map((order) => {
                 const orderId = order._id || order.id || '';
+                const isExpanded = expandedOrders[orderId];
+                
                 return (
                   <div key={orderId} className="order-card">
                     {/* Order Header */}
@@ -265,16 +276,15 @@ const OrderHistoryPage: React.FC = () => {
                           </div>
                         </div>
                         <button
-                          onClick={() => handleGetStatusDetails(orderId, order.status)}
-                          disabled={!!statusDetails[orderId]}
+                          onClick={() => toggleOrderDetails(orderId, order.status)}
                           className="status-details-btn"
                         >
-                          <i className="fa-solid fa-circle-info"></i>
-                          {statusDetails[orderId] ? 'Details Viewed' : 'View Order Details'}
+                          <i className={`fa-solid ${isExpanded ? 'fa-eye-slash' : 'fa-circle-info'}`}></i>
+                          {isExpanded ? 'Hide Details' : 'View Order Details'}
                         </button>
                       </div>
 
-                      {statusDetails[orderId] && (
+                      {isExpanded && statusDetails[orderId] && (
                         <div className="restaurant-status-box">
                           <div className="restaurant-status-header">
                             <div className="restaurant-icon">

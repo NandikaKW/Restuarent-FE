@@ -6,7 +6,7 @@ export type MenuItem = {
   description?: string;
   price: number;
   imageURL: string; 
-  category: string; // Add this line
+  category: string; 
 };
 
 export const adminMenuService = {

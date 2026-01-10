@@ -758,3 +758,261 @@
     gap: 15px;
   }
 }
+
+
+/* ========== SUCCESS MESSAGE ALERT ========== */
+.login-success-message {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: login-slideInSuccess 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes login-slideInSuccess {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.login-success-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: login-shimmer 3s infinite;
+}
+
+@keyframes login-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.login-success-message i {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: login-successBounce 2s infinite;
+}
+
+@keyframes login-successBounce {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-10px) rotate(10deg); 
+  }
+}
+
+.login-success-content {
+  flex: 1;
+}
+
+.login-success-content h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  margin: 0 0 8px 0;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.login-success-content p {
+  font-family: 'Epilogue', sans-serif;
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+.login-success-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+}
+
+.login-success-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: white;
+  animation: login-progress 2s linear forwards;
+  transform-origin: left;
+}
+
+@keyframes login-progress {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+/* ========== ENHANCED ERROR MESSAGE ALERT ========== */
+.login-error-message {
+  animation: login-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(255, 71, 87, 0.3);
+}
+
+@keyframes login-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-2px); }
+  40%, 60% { transform: translateX(2px); }
+}
+
+.login-error-message i {
+  background: rgba(255, 255, 255, 0.2);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: login-pulseError 2s infinite;
+}
+
+@keyframes login-pulseError {
+  0%, 100% { 
+    transform: scale(1); 
+    color: #ffebee;
+  }
+  50% { 
+    transform: scale(1.1); 
+    color: white;
+  }
+}
+
+.login-error-message span {
+  flex: 1;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.login-error-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.login-error-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* ========== LOADING STATE ENHANCEMENTS ========== */
+.login-submit-button:disabled .fa-spinner {
+  animation: login-spin 1s linear infinite;
+}
+
+@keyframes login-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.login-submit-button:disabled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: login-loading 1.5s infinite;
+}
+
+@keyframes login-loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ========== INPUT VALIDATION STATES ========== */
+.login-form-input.valid {
+  border-color: #4CAF50;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 20px;
+  padding-right: 45px;
+}
+
+.login-form-input.invalid {
+  border-color: #f3274c;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f3274c'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 20px;
+  padding-right: 45px;
+}
+
+/* ========== RESPONSIVE MESSAGE STYLES ========== */
+@media (max-width: 768px) {
+  .login-success-message,
+  .login-error-message {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .login-success-message i,
+  .login-error-message i {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .login-success-content h4 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-success-message,
+  .login-error-message {
+    padding: 15px;
+  }
+  
+  .login-success-content p,
+  .login-error-message span {
+    font-size: 0.85rem;
+  }
+}

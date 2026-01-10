@@ -1119,3 +1119,579 @@
     min-width: auto;
   }
 }
+
+
+/* Alert Overlay */
+.booking-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: booking-alert-fade-in 0.2s ease-out;
+}
+
+@keyframes booking-alert-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Alert Container */
+.booking-alert-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: booking-alert-slide-up 0.3s ease-out;
+}
+
+@keyframes booking-alert-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Alert Icon */
+.booking-alert-icon {
+  font-size: 3rem;
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+/* Alert Title */
+.booking-alert-title {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Alert Message */
+.booking-alert-message {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* Alert Buttons Container */
+.booking-alert-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Alert Buttons */
+.booking-alert-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.booking-alert-btn-primary {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.booking-alert-btn-primary:hover:not(:disabled) {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.booking-alert-btn-secondary {
+  background-color: #f8f9fa;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.booking-alert-btn-secondary:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.booking-alert-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Alert Spinner */
+.booking-alert-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: booking-alert-spin 1s ease-in-out infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes booking-alert-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== BOOKING ALERT MESSAGE STYLES ========== */
+.booking-alert-message-container {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  z-index: 9999;
+  min-width: 350px;
+  max-width: 450px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(243, 39, 76, 0.15);
+  overflow: hidden;
+  animation: booking-alert-slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  font-family: 'Epilogue', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.booking-alert-success {
+  border-left: 5px solid #4CAF50;
+  box-shadow: 0 15px 40px rgba(76, 175, 80, 0.15);
+}
+
+.booking-alert-error {
+  border-left: 5px solid #f3274c;
+  box-shadow: 0 15px 40px rgba(243, 39, 76, 0.15);
+}
+
+.booking-alert-info {
+  border-left: 5px solid #28a745;
+  box-shadow: 0 15px 40px rgba(40, 167, 69, 0.15);
+}
+
+@keyframes booking-alert-slideIn {
+  from {
+    transform: translateX(100%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes booking-alert-slideOut {
+  from {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.booking-alert-message-content {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 18px;
+  background: white;
+  position: relative;
+}
+
+.booking-alert-success .booking-alert-message-content {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.02) 0%, #ffffff 100%);
+}
+
+.booking-alert-error .booking-alert-message-content {
+  background: linear-gradient(135deg, rgba(243, 39, 76, 0.02) 0%, #ffffff 100%);
+}
+
+.booking-alert-info .booking-alert-message-content {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.02) 0%, #ffffff 100%);
+}
+
+.booking-alert-message-icon {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  animation: booking-alert-icon-pulse 0.6s ease;
+}
+
+.booking-alert-success .booking-alert-message-icon {
+  background: linear-gradient(135deg, #4CAF50, #66bb6a);
+  color: white;
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+.booking-alert-error .booking-alert-message-icon {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  box-shadow: 0 5px 15px rgba(243, 39, 76, 0.3);
+}
+
+.booking-alert-info .booking-alert-message-icon {
+  background: linear-gradient(135deg, #28a745, #34d058);
+  color: white;
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+@keyframes booking-alert-icon-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.booking-alert-message-text {
+  flex: 1;
+}
+
+.booking-alert-message-text p {
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+  line-height: 1.5;
+  font-size: 1rem;
+  font-family: 'Epilogue', sans-serif;
+}
+
+.booking-alert-message-close {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.booking-alert-message-close:hover {
+  background: rgba(243, 39, 76, 0.1);
+  color: #f3274c;
+  transform: rotate(90deg);
+}
+
+.booking-alert-message-progress {
+  height: 4px;
+  width: 100%;
+  background: rgba(243, 39, 76, 0.1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 2px 2px;
+}
+
+.booking-alert-success .booking-alert-message-progress {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.booking-alert-error .booking-alert-message-progress {
+  background: rgba(243, 39, 76, 0.1);
+}
+
+.booking-alert-info .booking-alert-message-progress {
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.booking-alert-message-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #f3274c, #ff6b8b);
+  animation: booking-alert-progress 4s linear forwards;
+  border-radius: 0 0 2px 2px;
+}
+
+.booking-alert-success .booking-alert-message-progress::after {
+  background: linear-gradient(90deg, #4CAF50, #66bb6a);
+}
+
+.booking-alert-error .booking-alert-message-progress::after {
+  background: linear-gradient(90deg, #f3274c, #ff6b8b);
+}
+
+.booking-alert-info .booking-alert-message-progress::after {
+  background: linear-gradient(90deg, #28a745, #34d058);
+}
+
+@keyframes booking-alert-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Update Cancel Alert Overlay */
+.booking-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: booking-alert-fade-in 0.3s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes booking-alert-fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.booking-alert-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  animation: booking-alert-scale-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid rgba(243, 39, 76, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.booking-alert-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f3274c, #ff6b8b);
+  background-size: 400% 100%;
+  animation: booking-alert-gradient-flow 3s ease infinite;
+}
+
+@keyframes booking-alert-gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes booking-alert-scale-up {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.booking-alert-icon {
+  font-size: 3.5rem;
+  color: #28a745;
+  margin-bottom: 1.5rem;
+  animation: booking-alert-leaf-spin 1s ease;
+}
+
+@keyframes booking-alert-leaf-spin {
+  0% {
+    transform: rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.booking-alert-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-family: 'Fredoka One', cursive;
+}
+
+.booking-alert-message {
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1rem;
+  font-family: 'Epilogue', sans-serif;
+}
+
+.booking-alert-buttons {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+}
+
+.booking-alert-btn {
+  padding: 1rem 2rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  font-family: 'Epilogue', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.booking-alert-btn-primary {
+  background: linear-gradient(135deg, #f3274c, #ff6b8b);
+  color: white;
+  box-shadow: 0 5px 15px rgba(243, 39, 76, 0.3);
+}
+
+.booking-alert-btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(243, 39, 76, 0.4);
+}
+
+.booking-alert-btn-secondary {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.booking-alert-btn-secondary:hover {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.booking-alert-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.booking-alert-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: booking-alert-spin 1s ease-in-out infinite;
+}
+
+@keyframes booking-alert-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Alert */
+@media (max-width: 768px) {
+  .booking-alert-message-container {
+    top: 80px;
+    right: 15px;
+    left: 15px;
+    max-width: none;
+    min-width: auto;
+    margin: 0 auto;
+  }
+  
+  .booking-alert-message-content {
+    padding: 16px;
+    gap: 15px;
+  }
+  
+  .booking-alert-message-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.6rem;
+  }
+  
+  .booking-alert-container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .booking-alert-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .booking-alert-btn {
+    min-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .booking-alert-message-container {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+  
+  .booking-alert-message-text p {
+    font-size: 0.95rem;
+  }
+  
+  .booking-alert-title {
+    font-size: 1.5rem;
+  }
+  
+  .booking-alert-message {
+    font-size: 0.95rem;
+  }
+}
+
+/* Ensure alert shows above all content */
+.booking-container .booking-alert-message-container {
+  z-index: 10001;
+}

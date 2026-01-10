@@ -19,6 +19,9 @@ const MenuPage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [loadingItems, setLoadingItems] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | "info">("success");
 
   // Filters
   const [search, setSearch] = useState("");
@@ -48,8 +51,31 @@ const MenuPage: React.FC = () => {
       setTotalPages(data.totalPages);
     } catch (err) {
       console.error("Error loading items:", err);
+      showAlertMessage("Failed to load menu items. Please try again.", "error");
     }
     setLoadingItems(false);
+  };
+
+  const showAlertMessage = (message: string, type: "success" | "error" | "info") => {
+    setAlertMessage(message);
+    setAlertType(type);
+    setShowAlert(true);
+
+    // Auto-hide alert after 5 seconds
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 5000);
+  };
+
+  const handleAddToCart = (item: Item) => {
+    addToCart({
+      menuItemId: item._id,
+      name: item.title,
+      price: item.price,
+      image: item.imageURL,
+      quantity: 1,
+    });
+    showAlertMessage(`${item.title} added to cart successfully!`, "success");
   };
 
   useEffect(() => {
@@ -69,10 +95,35 @@ const MenuPage: React.FC = () => {
     setMaxPrice(50);
     setSortBy("latest");
     setPage(1);
+    showAlertMessage("All filters cleared successfully!", "info");
   };
 
   return (
     <div className="menu-page-container">
+      {/* Alert Message - Positioned below navbar */}
+      {showAlert && (
+        <div className={`menu-alert menu-alert-${alertType}`}>
+          <div className="menu-alert-content">
+            <div className="menu-alert-icon">
+              {alertType === "success" && <i className="fas fa-check-circle"></i>}
+              {alertType === "error" && <i className="fas fa-exclamation-circle"></i>}
+              {alertType === "info" && <i className="fas fa-leaf"></i>}
+            </div>
+            <div className="menu-alert-message">
+              <p>{alertMessage}</p>
+            </div>
+            <button
+              className="menu-alert-close"
+              onClick={() => setShowAlert(false)}
+              aria-label="Close alert"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+          <div className="menu-alert-progress"></div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="menu-page-hero">
         <div className="menu-page-container-inner">
@@ -119,7 +170,7 @@ const MenuPage: React.FC = () => {
                   className={`menu-category-chip ${selectedCategories.includes(cat.toLowerCase()) ? 'menu-category-active' : ''}`}
                 >
                   {cat}
-                  {selectedCategories.includes(cat.toLowerCase()) && 
+                  {selectedCategories.includes(cat.toLowerCase()) &&
                     <i className="fa-solid fa-check"></i>
                   }
                 </button>
@@ -154,21 +205,21 @@ const MenuPage: React.FC = () => {
           <div className="menu-filter-section">
             <h3><i className="fa-solid fa-arrow-up-wide-short"></i> Sort By</h3>
             <div className="menu-sort-options">
-              <button 
+              <button
                 onClick={() => setSortBy("latest")}
                 className={`menu-sort-btn ${sortBy === "latest" ? 'menu-sort-active' : ''}`}
               >
                 <i className="fa-solid fa-clock"></i>
                 Latest
               </button>
-              <button 
+              <button
                 onClick={() => setSortBy("priceLowHigh")}
                 className={`menu-sort-btn ${sortBy === "priceLowHigh" ? 'menu-sort-active' : ''}`}
               >
                 <i className="fa-solid fa-arrow-up"></i>
                 Price: Low → High
               </button>
-              <button 
+              <button
                 onClick={() => setSortBy("priceHighLow")}
                 className={`menu-sort-btn ${sortBy === "priceHighLow" ? 'menu-sort-active' : ''}`}
               >
@@ -249,7 +300,7 @@ const MenuPage: React.FC = () => {
                       {item.category || "Special"}
                     </div>
                     <div className="menu-card-overlay">
-                      <button 
+                      <button
                         onClick={() => setSelectedItem(item)}
                         className="menu-overlay-btn"
                       >
@@ -258,7 +309,7 @@ const MenuPage: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="menu-card-content">
                     <div className="menu-card-header">
                       <h3>{item.title}</h3>
@@ -266,36 +317,28 @@ const MenuPage: React.FC = () => {
                         ${item.price.toFixed(2)}
                       </span>
                     </div>
-                    
+
                     <p className="menu-card-description">
                       {item.description}
                     </p>
-                    
+
                     <div className="menu-card-rating">
                       {[...Array(5)].map((_, i) => (
                         <i key={i} className="fa-solid fa-star"></i>
                       ))}
                       <span>(4.5)</span>
                     </div>
-                    
+
                     <div className="menu-card-actions">
                       <button
-                        onClick={() =>
-                          addToCart({
-                            menuItemId: item._id,
-                            name: item.title,
-                            price: item.price,
-                            image: item.imageURL,
-                            quantity: 1,
-                          })
-                        }
+                        onClick={() => handleAddToCart(item)}
                         disabled={loading}
                         className="menu-add-to-cart"
                       >
                         <i className="fa-solid fa-cart-plus"></i>
                         {loading ? "Adding..." : "Add to Cart"}
                       </button>
-                      
+
                       <button
                         onClick={() => setSelectedItem(item)}
                         className="menu-reviews-btn"
@@ -321,7 +364,7 @@ const MenuPage: React.FC = () => {
                 <i className="fa-solid fa-chevron-left"></i>
                 Previous
               </button>
-              
+
               <div className="menu-page-numbers">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
@@ -334,7 +377,7 @@ const MenuPage: React.FC = () => {
                   } else {
                     pageNum = page - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNum}
@@ -346,7 +389,7 @@ const MenuPage: React.FC = () => {
                   );
                 })}
               </div>
-              
+
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage((p) => p + 1)}

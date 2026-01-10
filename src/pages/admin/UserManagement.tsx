@@ -1,7 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { adminUserService } from '../../services/adminUserService';
 import type { AdminUser, UserStats } from '../../types/admin';
 import "../../components/componentStyles/AdminUserManagement.css";
+
+// Custom Alert Component
+interface AlertProps {
+  type: 'success' | 'error' | 'warning' | 'info';
+  message: string;
+  onClose: () => void;
+  duration?: number;
+}
+
+const CustomAlert: React.FC<AlertProps> = ({ type, message, onClose, duration = 3000 }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, duration);
+    
+    return () => clearTimeout(timer);
+  }, [duration, onClose]);
+  
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-times-circle',
+    warning: 'fa-exclamation-triangle',
+    info: 'fa-leaf'
+  };
+  
+  const bgColors = {
+    success: 'um-alert-success',
+    error: 'um-alert-error',
+    warning: 'um-alert-warning',
+    info: 'um-alert-info'
+  };
+  
+  return (
+    <div className={`um-alert ${bgColors[type]}`}>
+      <div className="um-alert-content">
+        <i className={`fas ${icons[type]} um-alert-icon`}></i>
+        <div className="um-alert-text">
+          <span className="um-alert-title">
+            {type === 'success' && 'Success!'}
+            {type === 'error' && 'Error!'}
+            {type === 'warning' && 'Warning!'}
+            {type === 'info' && 'Confirm'}
+          </span>
+          <span className="um-alert-message">{message}</span>
+        </div>
+      </div>
+      <button 
+        onClick={onClose}
+        className="um-alert-close"
+      >
+        <i className="fas fa-times"></i>
+      </button>
+    </div>
+  );
+};
 
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -21,9 +76,27 @@ const UserManagement: React.FC = () => {
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
+  // Alert state
+  const [alerts, setAlerts] = useState<Array<{
+    id: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+    message: string;
+  }>>([]);
+
   useEffect(() => {
     fetchUsers();
     fetchStats();
+  }, []);
+
+  // Alert helper function
+  const showAlert = useCallback((type: 'success' | 'error' | 'warning' | 'info', message: string) => {
+    const id = Date.now().toString();
+    setAlerts(prev => [...prev, { id, type, message }]);
+  }, []);
+
+  // Remove alert
+  const removeAlert = useCallback((id: string) => {
+    setAlerts(prev => prev.filter(alert => alert.id !== id));
   }, []);
 
   const fetchUsers = async () => {
@@ -34,6 +107,7 @@ const UserManagement: React.FC = () => {
       setUsers(usersData);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to fetch users');
+      showAlert('error', 'Failed to fetch users');
     } finally {
       setLoading(false);
     }
@@ -72,6 +146,7 @@ const UserManagement: React.FC = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      showAlert('warning', 'Please fix all validation errors');
       return;
     }
 
@@ -93,7 +168,7 @@ const UserManagement: React.FC = () => {
       setShowAddForm(false);
       
       // Show success message
-      alert(`User ${response.user.firstName} ${response.user.lastName} created successfully as ${response.user.role}!`);
+      showAlert('success', `User ${response.user.firstName} ${response.user.lastName} created successfully as ${response.user.role}!`);
       
       // Refresh stats
       await fetchStats();
@@ -101,8 +176,7 @@ const UserManagement: React.FC = () => {
     } catch (err: any) {
       const errorMsg = err.response?.data?.message || 'Failed to create user';
       setError(errorMsg);
-      // Auto-clear error after 5 seconds
-      setTimeout(() => setError(null), 5000);
+      showAlert('error', errorMsg);
     }
   };
 
@@ -112,14 +186,59 @@ const UserManagement: React.FC = () => {
       setUsers(prev => prev.map(user => 
         user._id === userId ? response.user : user
       ));
-      alert(`User role updated to ${newRole} successfully!`);
+      showAlert('success', `User role updated to ${newRole} successfully!`);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to update user role');
+      const errorMsg = err.response?.data?.message || 'Failed to update user role';
+      setError(errorMsg);
+      showAlert('error', errorMsg);
     }
   };
 
   const deleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+    // Custom confirmation dialog
+    const deleteConfirmed = await new Promise<boolean>((resolve) => {
+      const dialogContainer = document.createElement('div');
+      dialogContainer.innerHTML = `
+        <div class="um-confirm-dialog-overlay">
+          <div class="um-confirm-dialog">
+            <div class="um-confirm-header">
+              <i class="fas fa-leaf"></i>
+              <h3>Confirm User Deletion</h3>
+            </div>
+            <div class="um-confirm-body">
+              <p>Are you sure you want to delete this user account?</p>
+            </div>
+            <div class="um-confirm-actions">
+              <button class="um-confirm-cancel">
+                Cancel
+              </button>
+              <button class="um-confirm-delete">
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(dialogContainer);
+      
+      // Add event listeners
+      const cancelBtn = dialogContainer.querySelector('.um-confirm-cancel');
+      const deleteBtn = dialogContainer.querySelector('.um-confirm-delete');
+      
+      cancelBtn?.addEventListener('click', () => {
+        dialogContainer.remove();
+        resolve(false);
+      });
+      
+      deleteBtn?.addEventListener('click', () => {
+        dialogContainer.remove();
+        resolve(true);
+      });
+    });
+
+    if (!deleteConfirmed) {
+      showAlert('info', 'User deletion cancelled');
       return;
     }
 
@@ -128,9 +247,11 @@ const UserManagement: React.FC = () => {
       setUsers(prev => prev.filter(user => user._id !== userId));
       // Refresh stats after deletion
       await fetchStats();
-      alert('User deleted successfully!');
+      showAlert('success', 'User deleted successfully!');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to delete user');
+      const errorMsg = err.response?.data?.message || 'Failed to delete user';
+      setError(errorMsg);
+      showAlert('error', errorMsg);
     }
   };
 
@@ -153,6 +274,7 @@ const UserManagement: React.FC = () => {
     });
     setFormErrors({});
     setShowAddForm(false);
+    showAlert('info', 'User creation cancelled');
   };
 
   // Filter users based on search
@@ -168,6 +290,18 @@ const UserManagement: React.FC = () => {
 
   return (
     <div className="user-management-container">
+      {/* Alert Container */}
+      <div className="um-alert-container">
+        {alerts.map(alert => (
+          <CustomAlert
+            key={alert.id}
+            type={alert.type}
+            message={alert.message}
+            onClose={() => removeAlert(alert.id)}
+          />
+        ))}
+      </div>
+
       {/* Header Section */}
       <div className="um-header">
         <h2>User Management</h2>
