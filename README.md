@@ -1,73 +1,188 @@
-# React + TypeScript + Vite
+## 🍽️ Restaurant Website – Full Stack Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **full stack restaurant web application** developed using **MERN stack technologies**.
+The system provides a complete solution for **online food browsing, ordering, authentication, and administration**, following **Rapid Application Development (RAD)** principles.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Project Overview
 
-## React Compiler
+This project consists of **two main parts**:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Frontend** – User interface for customers and administrators
+* **Backend** – RESTful API handling business logic, authentication, and data management
 
-## Expanding the ESLint configuration
+The application allows users to browse menu items, place orders, submit reviews, and securely authenticate, while administrators can manage menu items, orders, and users.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚙️ Core Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🔐 Authentication & Security
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* User authentication using JWT
+* Access Token & Refresh Token mechanism
+* Secure login and logout
+* Password hashing with bcrypt
+* Role-based access control (Admin / User)
+
+### 🍔 Restaurant Functionality
+
+* Menu item management (CRUD)
+* Food category management
+* Image upload using Cloudinary
+* Order placement and order management
+* Customer reviews and ratings
+
+### 🧱 System Architecture
+
+* RESTful API design
+* Clean layered architecture
+* Secure environment variable handling
+* Separation of frontend and backend
+
+---
+
+## 🛠️ Technologies Used
+
+### 🔵 Frontend
+
+* **React.js**
+* **TypeScript**
+* **CSS / Tailwind / Bootstrap**
+* **Axios**
+* **JWT handling**
+* **React Router**
+
+### 🟢 Backend
+
+* **Node.js**
+* **Express.js**
+* **TypeScript**
+* **MongoDB** with **Mongoose**
+* **JWT (Access & Refresh Tokens)**
+* **Cloudinary**
+* **bcryptjs**
+* **dotenv**
+* **CORS**
+* **multer**
+* **express-validator**
+
+---
+
+## 🚀 Setup & Run Instructions
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/your-username/restaurant-project.git
+cd restaurant-project
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2️⃣ Backend Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd backend
+npm install
 ```
+
+Create a `.env` file inside the backend folder:
+
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+
+ACCESS_TOKEN_SECRET=your_access_token_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+ACCESS_TOKEN_EXPIRE=15m
+REFRESH_TOKEN_EXPIRE=7d
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+Run backend server:
+
+```bash
+npm run dev
+```
+
+Backend will run at:
+**[http://localhost:5000](http://localhost:5000)**
+
+---
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend will run at:
+**[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 📁 Project Structure
+
+```
+restaurant-project/
+ ├── frontend/            # React frontend
+ │   ├── src/
+ │   ├── components/
+ │   ├── pages/
+ │   ├── services/
+ │   └── App.tsx
+ │
+ ├── backend/             # Express backend
+ │   ├── src/
+ │   ├── controllers/
+ │   ├── models/
+ │   ├── routes/
+ │   ├── middleware/
+ │   ├── services/
+ │   ├── config/
+ │   └── server.ts
+```
+
+---
+
+## 🔐 Security Practices
+
+* JWT-based authentication
+* Access & Refresh token implementation
+* Password encryption using bcrypt
+* Protected routes with middleware
+* Secure Cloudinary image handling
+* Environment variables for sensitive data
+* CORS protection
+
+---
+
+## 📌 Notes
+
+* MongoDB must be running before starting the backend
+* Valid Cloudinary credentials are required
+* Frontend and backend run independently
+* Designed and developed using **RAD methodology**
+
+---
+
+## 👨‍💻 Author
+
+**Nandika Kaweesha**
+Full Stack Developer
+RAD Coursework Project
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**
+
+
