@@ -53,45 +53,22 @@
   to { opacity: 1; }
 }
 
-/* ========== PAYMENT POPUP CONTAINER - MATCHED TO CART ========== */
+/* ========== PAYMENT POPUP CONTAINER - IMPROVED SCROLLING ========== */
 .payment-popup-container {
   background: white;
   border-radius: 25px;
   width: 100%;
   max-width: 550px;
+  height: auto;
   max-height: 85vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   border: 2px solid rgba(243, 39, 76, 0.1);
   margin: 20px 0;
-}
-
-/* Custom scrollbar for the popup container */
-.payment-popup-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.payment-popup-container::-webkit-scrollbar-track {
-  background: #f5f8fd;
-  border-radius: 10px;
-  margin: 10px;
-}
-
-.payment-popup-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #4CAF50, #8BC34A);
-  border-radius: 10px;
-}
-
-.payment-popup-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #388E3C, #689F38);
-}
-
-/* Firefox scrollbar styling for container */
-.payment-popup-container {
-  scrollbar-width: thin;
-  scrollbar-color: #4CAF50 #f5f8fd;
+  overflow: hidden; /* Prevent double scrollbars */
 }
 
 @keyframes slideUp {
@@ -105,7 +82,7 @@
   }
 }
 
-/* Header with gradient border - Matched to Cart */
+/* Header with gradient border */
 .payment-popup-container::before {
   content: '';
   position: absolute;
@@ -124,7 +101,51 @@
   50% { background-position: 100% 50%; }
 }
 
-/* ========== PAYMENT POPUP HEADER - MATCHED TO CART ========== */
+/* ========== SCROLLABLE CONTENT AREA ========== */
+.payment-popup-content {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(85vh - 140px); /* Account for header and padding */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom scrollbar for the content area */
+.payment-popup-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.payment-popup-content::-webkit-scrollbar-track {
+  background: #f5f8fd;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.payment-popup-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.payment-popup-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #388E3C, #689F38);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Firefox scrollbar styling for content */
+.payment-popup-content {
+  scrollbar-width: thin;
+  scrollbar-color: #4CAF50 #f5f8fd;
+}
+
+/* Hide scrollbar when not needed */
+.payment-popup-content:not(:hover)::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* ========== PAYMENT POPUP HEADER - FIXED ========== */
 .payment-popup-header {
   padding: 40px 40px 20px;
   display: flex;
@@ -132,12 +153,13 @@
   align-items: flex-start;
   border-bottom: 1px solid #f5f8fd;
   background: white;
-  border-radius: 25px 25px 0 0;
+  flex-shrink: 0; /* Prevent header from shrinking */
   position: sticky;
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 25px 25px 0 0;
 }
 
 .payment-title {
@@ -171,7 +193,7 @@
     rgba(255, 255, 255, 0) 100%);
 }
 
-/* SSL Icon - Made more prominent */
+/* SSL Icon */
 .payment-popup-container .ssl-icon {
   font-size: 32px !important;
   color: white;
@@ -239,7 +261,7 @@
   cursor: not-allowed;
 }
 
-/* ========== ORDER SUMMARY - MATCHED TO CART ========== */
+/* ========== ORDER SUMMARY ========== */
 .payment-popup-container .payment-order-summary {
   padding: 24px 32px;
   background: linear-gradient(135deg, 
@@ -248,6 +270,7 @@
   margin: 20px 32px;
   border-radius: 20px;
   border: 1px solid rgba(76, 175, 80, 0.1);
+  flex-shrink: 0; /* Prevent summary from shrinking */
 }
 
 .payment-popup-container .summary-header {
@@ -337,7 +360,7 @@
   font-size: 0.9rem;
 }
 
-/* ========== ERROR MESSAGE - MATCHED TO CART ========== */
+/* ========== ERROR MESSAGE ========== */
 .payment-popup-container .payment-error-message {
   background: white;
   border-radius: 20px;
@@ -349,6 +372,7 @@
   animation: shake 0.5s ease;
   border: 2px solid rgba(255, 107, 107, 0.2);
   box-shadow: 0 10px 20px rgba(255, 107, 107, 0.1);
+  flex-shrink: 0; /* Prevent error from shrinking */
 }
 
 @keyframes shake {
@@ -404,12 +428,16 @@
   transform: scale(1.1);
 }
 
-/* ========== PAYMENT FORM ========== */
+/* ========== PAYMENT FORM - SCROLLABLE ========== */
 .payment-popup-container .payment-form {
-  padding: 0 32px 32px;
+  padding: 0 32px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important for flex scrolling */
 }
 
-/* Section Headers - Matched to Cart */
+/* Section Headers */
 .payment-popup-container .section-header {
   display: flex;
   align-items: center;
@@ -417,6 +445,7 @@
   margin-bottom: 25px;
   padding-bottom: 20px;
   border-bottom: 2px solid #f5f8fd;
+  flex-shrink: 0; /* Prevent headers from shrinking */
 }
 
 .payment-popup-container .section-header i {
@@ -439,12 +468,13 @@
   color: #333;
 }
 
-/* Payment Methods Grid - Matched to Cart */
+/* Payment Methods Grid */
 .payment-popup-container .payment-methods-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin-bottom: 40px;
+  flex-shrink: 0; /* Prevent grid from shrinking */
 }
 
 .payment-popup-container .payment-method-card {
@@ -461,6 +491,7 @@
   position: relative;
   border: none;
   background: transparent;
+  flex-shrink: 0; /* Prevent cards from shrinking */
 }
 
 .payment-popup-container .payment-method-card:hover {
@@ -535,10 +566,12 @@
 /* Card Details Form */
 .payment-popup-container .card-details-section {
   margin-bottom: 40px;
+  flex-shrink: 0; /* Prevent section from shrinking */
 }
 
 .payment-popup-container .form-group {
   margin-bottom: 25px;
+  flex-shrink: 0;
 }
 
 .payment-popup-container .form-label {
@@ -594,6 +627,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .payment-popup-container .card-security-note {
@@ -605,6 +639,7 @@
   border-radius: 15px;
   border: 2px solid rgba(76, 175, 80, 0.1);
   margin-top: 30px;
+  flex-shrink: 0;
 }
 
 .payment-popup-container .card-security-note i {
@@ -629,6 +664,7 @@
   padding: 30px;
   border-radius: 20px;
   margin-bottom: 40px;
+  flex-shrink: 0;
 }
 
 .payment-popup-container .paypal-message {
@@ -685,15 +721,26 @@
   font-size: 0.95rem;
 }
 
-/* ========== PAYMENT ACTIONS - MATCHED TO CART ========== */
+/* ========== STICKY PAYMENT ACTIONS ========== */
+.payment-popup-container .payment-actions-sticky {
+  margin-top: auto; /* Push to bottom */
+  padding: 20px 0;
+  background: white;
+  border-top: 1px solid #f5f8fd;
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
 .payment-popup-container .payment-actions {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 20px;
-  margin-bottom: 40px;
 }
 
-/* Button Styles - Matched to Cart with Green Border */
+/* Button Styles */
 .payment-popup-container .button {
   padding: 15px 30px;
   position: relative;
@@ -739,7 +786,7 @@
   border-color: #388E3C;
 }
 
-/* Green Border Button - Specific styling */
+/* Green Border Button */
 .payment-popup-container .green-border-btn {
   border: 3px solid #4CAF50 !important;
   background: linear-gradient(135deg, #4CAF50, #8BC34A) !important;
@@ -793,7 +840,7 @@
   backdrop-filter: blur(10px);
 }
 
-/* ========== RESPONSIVE DESIGN - MATCHED TO CART ========== */
+/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .payment-popup-overlay {
     padding: 10px;
@@ -807,14 +854,21 @@
     margin: 10px 0;
   }
   
-  .payment-popup-container .payment-popup-header,
+  .payment-popup-content {
+    max-height: calc(90vh - 130px);
+  }
+  
+  .payment-popup-container .payment-popup-header {
+    padding: 25px 25px 15px;
+  }
+  
   .payment-popup-container .payment-order-summary,
   .payment-popup-container .payment-form {
-    padding: 25px;
+    padding: 20px 25px;
   }
   
   .payment-popup-container .payment-order-summary {
-    margin: 20px 25px;
+    margin: 15px 25px;
   }
   
   .payment-popup-container .payment-title {
@@ -838,6 +892,7 @@
   
   .payment-popup-container .payment-actions {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .payment-popup-container .payment-error-message {
@@ -856,7 +911,7 @@
     width: 6px;
   }
   
-  .payment-popup-container::-webkit-scrollbar {
+  .payment-popup-content::-webkit-scrollbar {
     width: 6px;
   }
 }
@@ -867,11 +922,15 @@
     max-height: 95vh;
   }
   
+  .payment-popup-content {
+    max-height: calc(95vh - 120px);
+  }
+  
   .payment-popup-container .payment-popup-header {
     flex-direction: column;
     gap: 20px;
     text-align: center;
-    padding: 25px 25px 15px;
+    padding: 20px 20px 15px;
   }
   
   .payment-popup-container .payment-close-btn {
@@ -912,5 +971,9 @@
   .payment-popup-container .payment-submit-btn {
     padding: 18px;
     font-size: 1rem;
+  }
+  
+  .payment-popup-container .payment-actions-sticky {
+    padding: 15px 0;
   }
 }

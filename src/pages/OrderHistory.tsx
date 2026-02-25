@@ -57,15 +57,15 @@ const OrderHistoryPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const statusLower = status.toLowerCase();
-    if (statusLower.includes('completed') || statusLower.includes('delivered')) 
+    if (statusLower.includes('completed') || statusLower.includes('delivered'))
       return 'order-status-completed';
-    if (statusLower.includes('preparing') || statusLower.includes('processing')) 
+    if (statusLower.includes('preparing') || statusLower.includes('processing'))
       return 'order-status-preparing';
-    if (statusLower.includes('pending') || statusLower.includes('confirmed')) 
+    if (statusLower.includes('pending') || statusLower.includes('confirmed'))
       return 'order-status-pending';
-    if (statusLower.includes('cancelled')) 
+    if (statusLower.includes('cancelled'))
       return 'order-status-cancelled';
-    if (statusLower.includes('out_for_delivery')) 
+    if (statusLower.includes('out_for_delivery'))
       return 'order-status-delivery';
     return 'order-status-default';
   };
@@ -96,7 +96,7 @@ const OrderHistoryPage: React.FC = () => {
       'completed': 'Completed',
       'cancelled': 'Order cancelled'
     };
-    
+
     return estimatedTimes[statusLower] || 'Processing...';
   };
 
@@ -120,7 +120,7 @@ const OrderHistoryPage: React.FC = () => {
         }));
       } catch (error) {
         console.error("Failed to get status details:", error);
-        
+
         const restaurantStatusMessages: { [key: string]: string } = {
           'pending': 'Your order has been received and is awaiting confirmation from our kitchen team.',
           'confirmed': 'Order confirmed! Our chefs have started preparing your meal. Estimated preparation time: 15-25 minutes.',
@@ -132,11 +132,11 @@ const OrderHistoryPage: React.FC = () => {
           'completed': 'Order completed successfully. Thank you for dining with us!',
           'cancelled': 'This order has been cancelled as per your request or restaurant policy.',
         };
-        
+
         const statusKey = status.toLowerCase();
-        const fallback = restaurantStatusMessages[statusKey] || 
+        const fallback = restaurantStatusMessages[statusKey] ||
           `Your order status: "${status}". Our restaurant team is handling your order.`;
-        
+
         setStatusDetails(prev => ({
           ...prev,
           [orderId]: fallback
@@ -233,7 +233,7 @@ const OrderHistoryPage: React.FC = () => {
               {orders.map((order) => {
                 const orderId = order._id || order.id || '';
                 const isExpanded = expandedOrders[orderId];
-                
+
                 return (
                   <div key={orderId} className="order-card">
                     {/* Order Header */}
@@ -253,7 +253,7 @@ const OrderHistoryPage: React.FC = () => {
                           })}
                         </div>
                       </div>
-                      
+
                       <div className="order-status-section">
                         <div className="order-price">
                           ${(order.totalPrice || 0).toFixed(2)}
@@ -279,7 +279,7 @@ const OrderHistoryPage: React.FC = () => {
                           onClick={() => toggleOrderDetails(orderId, order.status)}
                           className="status-details-btn"
                         >
-                          <i className={`fa-solid ${isExpanded ? 'fa-eye-slash' : 'fa-circle-info'}`}></i>
+                          <i className={`fa-solid ${isExpanded ? 'fa-eye-slash' : 'fa-leaf'}`}></i>
                           {isExpanded ? 'Hide Details' : 'View Order Details'}
                         </button>
                       </div>
@@ -305,8 +305,8 @@ const OrderHistoryPage: React.FC = () => {
                             <div className="status-next-step">
                               <i className="fa-solid fa-arrow-right"></i>
                               <span>
-                                {order.status.toLowerCase().includes('delivered') || 
-                                 order.status.toLowerCase().includes('completed')
+                                {order.status.toLowerCase().includes('delivered') ||
+                                  order.status.toLowerCase().includes('completed')
                                   ? 'Thank you for your order!'
                                   : 'Next update will be provided shortly'}
                               </span>
@@ -322,7 +322,7 @@ const OrderHistoryPage: React.FC = () => {
                         <i className="fa-solid fa-list-check"></i>
                         <h4>Order Items</h4>
                       </div>
-                      
+
                       <div className="order-items-list">
                         {order.items?.map((item, index) => (
                           <div key={`${orderId}-${index}`} className="order-item">

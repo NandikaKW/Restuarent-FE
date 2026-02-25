@@ -1,21 +1,85 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../components/componentStyles/LoginPage.css';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    userEmail: '',  // Changed from 'email'
+    userPassword: '',  // Changed from 'password'
   });
+  
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [success, setSuccess] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [inputsReady, setInputsReady] = useState(false);
+  
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Initialize and prevent autofill
+  useEffect(() => {
+    // Clear state
+    setFormData({
+      userEmail: '',
+      userPassword: '',
+    });
+    
+    // Clear DOM inputs directly after a delay
+    const clearInputs = () => {
+      if (emailInputRef.current) {
+        emailInputRef.current.value = '';
+      }
+      if (passwordInputRef.current) {
+        passwordInputRef.current.value = '';
+      }
+      
+      // Also clear any autofilled values
+      setTimeout(() => {
+        if (emailInputRef.current) {
+          const emailInput = emailInputRef.current;
+          if (emailInput.value && !formData.userEmail) {
+            emailInput.value = '';
+          }
+        }
+        if (passwordInputRef.current) {
+          const passwordInput = passwordInputRef.current;
+          if (passwordInput.value && !formData.userPassword) {
+            passwordInput.value = '';
+          }
+        }
+      }, 100);
+    };
+
+    // Wait a bit before enabling inputs
+    const timer = setTimeout(() => {
+      clearInputs();
+      setInputsReady(true);
+    }, 200);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Additional cleanup after mount
+  useEffect(() => {
+    if (inputsReady) {
+      // Force clear one more time
+      setTimeout(() => {
+        if (emailInputRef.current?.value && !formData.userEmail) {
+          emailInputRef.current.value = '';
+        }
+        if (passwordInputRef.current?.value && !formData.userPassword) {
+          passwordInputRef.current.value = '';
+        }
+      }, 300);
+    }
+  }, [inputsReady, formData.userEmail, formData.userPassword]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -32,7 +96,11 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      await login(formData);
+      // Convert back to expected format
+      await login({
+        email: formData.userEmail,
+        password: formData.userPassword
+      });
       setSuccess('Login successful! Welcome back. Redirecting to dashboard...');
       setShowSuccess(true);
       setTimeout(() => {
@@ -47,6 +115,18 @@ const Login: React.FC = () => {
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
+  };
+
+  const clearAllFields = () => {
+    setFormData({
+      userEmail: '',
+      userPassword: '',
+    });
+    
+    if (emailInputRef.current) emailInputRef.current.value = '';
+    if (passwordInputRef.current) passwordInputRef.current.value = '';
+    
+    emailInputRef.current?.focus();
   };
 
   return (
@@ -168,29 +248,90 @@ const Login: React.FC = () => {
                 </div>
               )}
 
-              <form className="login-page-form" onSubmit={handleSubmit}>
+              <form 
+                ref={formRef}
+                className="login-page-form" 
+                onSubmit={handleSubmit}
+                autoComplete="off"
+              >
+                {/* Hidden fake inputs to trap browser autofill */}
+                <input
+                  type="email"
+                  name="fake-email"
+                  autoComplete="email"
+                  style={{ display: 'none' }}
+                  tabIndex={-1}
+                />
+                <input
+                  type="password"
+                  name="fake-password"
+                  autoComplete="current-password"
+                  style={{ display: 'none' }}
+                  tabIndex={-1}
+                />
+                
                 <div className="login-form-header">
                   <i className="fa-solid fa-sign-in-alt"></i>
                   <div>
                     <h3>Enter Your Credentials</h3>
                     <p>Secure login to your account</p>
                   </div>
+                  {(formData.userEmail || formData.userPassword) && (
+                    <button 
+                      type="button" 
+                      className="login-clear-all"
+                      onClick={clearAllFields}
+                      title="Clear all fields"
+                    >
+                      <i className="fa-solid fa-broom"></i> Clear All
+                    </button>
+                  )}
                 </div>
 
                 <div className="login-input-group">
-                  <label className="login-input-label">
-                    <i className="fa-solid fa-envelope"></i>
-                    Email Address
-                  </label>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    className="login-form-input"
-                    placeholder="Enter your email address"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
+                  <div className="login-input-label-row">
+                    <label className="login-input-label">
+                      <i className="fa-solid fa-envelope"></i>
+                      Email Address
+                    </label>
+                    {formData.userEmail && (
+                      <button 
+                        type="button" 
+                        className="login-field-clear"
+                        onClick={() => {
+                          setFormData(prev => ({ ...prev, userEmail: '' }));
+                          if (emailInputRef.current) emailInputRef.current.value = '';
+                        }}
+                        title="Clear email"
+                      >
+                        <i className="fa-solid fa-times"></i>
+                      </button>
+                    )}
+                  </div>
+                  
+                  {inputsReady ? (
+                    <input
+                      ref={emailInputRef}
+                      name="userEmail"
+                      type="email"
+                      required
+                      className="login-form-input"
+                      placeholder="Enter your email address"
+                      value={formData.userEmail}
+                      onChange={handleChange}
+                      autoComplete="off"
+                      onFocus={(e) => {
+                        // Clear if browser autofilled
+                        if (e.target.value && !formData.userEmail) {
+                          e.target.value = '';
+                          setFormData(prev => ({ ...prev, userEmail: '' }));
+                        }
+                      }}
+                    />
+                  ) : (
+                    <div className="login-input-skeleton"></div>
+                  )}
+                  
                   <div className="login-input-hint">
                     <i className="fa-solid fa-info-circle"></i>
                     Enter the email you used during registration
@@ -198,19 +339,49 @@ const Login: React.FC = () => {
                 </div>
 
                 <div className="login-input-group">
-                  <label className="login-input-label">
-                    <i className="fa-solid fa-lock"></i>
-                    Password
-                  </label>
-                  <input
-                    name="password"
-                    type="password"
-                    required
-                    className="login-form-input"
-                    placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleChange}
-                  />
+                  <div className="login-input-label-row">
+                    <label className="login-input-label">
+                      <i className="fa-solid fa-lock"></i>
+                      Password
+                    </label>
+                    {formData.userPassword && (
+                      <button 
+                        type="button" 
+                        className="login-field-clear"
+                        onClick={() => {
+                          setFormData(prev => ({ ...prev, userPassword: '' }));
+                          if (passwordInputRef.current) passwordInputRef.current.value = '';
+                        }}
+                        title="Clear password"
+                      >
+                        <i className="fa-solid fa-times"></i>
+                      </button>
+                    )}
+                  </div>
+                  
+                  {inputsReady ? (
+                    <input
+                      ref={passwordInputRef}
+                      name="userPassword"
+                      type="password"
+                      required
+                      className="login-form-input"
+                      placeholder="Enter your password"
+                      value={formData.userPassword}
+                      onChange={handleChange}
+                      autoComplete="new-password"
+                      onFocus={(e) => {
+                        // Clear if browser autofilled
+                        if (e.target.value && !formData.userPassword) {
+                          e.target.value = '';
+                          setFormData(prev => ({ ...prev, userPassword: '' }));
+                        }
+                      }}
+                    />
+                  ) : (
+                    <div className="login-input-skeleton"></div>
+                  )}
+                  
                   <div className="login-password-actions">
                     <div className="login-remember-me" onClick={toggleRememberMe}>
                       <div className={`login-remember-checkbox ${rememberMe ? 'checked' : ''}`}>
@@ -223,7 +394,7 @@ const Login: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !inputsReady}
                   className="login-submit-button"
                 >
                   {loading ? (
